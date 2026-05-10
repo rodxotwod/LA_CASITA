@@ -1,0 +1,883 @@
+:root {
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  color: #fff9ef;
+  background: #071019;
+  font-synthesis: none;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  --pink: #e99b82;
+  --pink-deep: #c97464;
+  --yellow: #f5bf25;
+  --cream: #fff2da;
+  --ink: #120f0f;
+  --green: #214f31;
+  --blue-night: #071019;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow: hidden;
+}
+
+button {
+  font: inherit;
+}
+
+.app-shell,
+.facade-screen,
+.porch-screen,
+.memory-screen {
+  width: 100%;
+  height: 100%;
+  min-height: 100svh;
+}
+
+.app-shell {
+  position: relative;
+  overflow: hidden;
+  background: #8c66c7;
+}
+
+.facade-screen {
+  position: relative;
+  display: grid;
+  place-items: center;
+  background: #8c66c7;
+}
+
+.three-stage {
+  position: absolute;
+  inset: 0;
+}
+
+.facade-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 52%, transparent 0 31rem, rgba(19, 40, 20, 0.3) 52rem),
+    linear-gradient(180deg, rgba(255, 248, 213, 0.18), transparent 36%, rgba(7, 18, 8, 0.28));
+}
+
+.hotspot {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  min-width: 4.8rem;
+  min-height: 4.8rem;
+  border: 0;
+  border-radius: 50%;
+  color: #fff8e8;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+  animation: none;
+}
+
+.hotspot::after {
+  content: "";
+  width: 1.1rem;
+  height: 1.1rem;
+  border: 1px solid rgba(255, 246, 222, 0.62);
+  border-radius: 50%;
+  background: rgba(255, 199, 36, 0.28);
+  opacity: 0;
+  transform: scale(0.84);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.hotspot span {
+  position: absolute;
+  top: calc(100% + 0.38rem);
+  left: 50%;
+  translate: -50% 0;
+  padding: 0.26rem 0.52rem;
+  border-radius: 999px;
+  color: #170f0a;
+  background: rgba(255, 239, 194, 0.88);
+  font-size: clamp(0.72rem, 2vw, 0.82rem);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-0.2rem);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.hotspot:hover span,
+.hotspot:focus-visible span {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hotspot:hover::after,
+.hotspot:focus-visible::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.hotspot-door {
+  left: 55%;
+  top: 54%;
+}
+
+.hotspot-chair {
+  left: 76%;
+  top: 61%;
+  animation-delay: 250ms;
+}
+
+.hotspot-window {
+  left: 34%;
+  top: 54%;
+  animation-delay: 500ms;
+}
+
+.facade-notice {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1rem, 4vw, 2.5rem);
+  translate: -50% 0;
+  max-width: min(28rem, calc(100vw - 2rem));
+  padding: 0.68rem 0.9rem;
+  border: 1px solid rgba(255, 243, 221, 0.28);
+  border-radius: 999px;
+  color: var(--cream);
+  background: rgba(11, 12, 12, 0.6);
+  text-align: center;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(10px);
+}
+
+.porch-screen {
+  position: relative;
+  padding: clamp(1rem, 2.5vw, 2rem);
+  background:
+    linear-gradient(180deg, rgba(3, 8, 12, 0.62), rgba(9, 12, 10, 0.22)),
+    radial-gradient(circle at 50% 10%, rgba(255, 217, 139, 0.2), transparent 32rem),
+    #111514;
+}
+
+.porch-background {
+  position: relative;
+  width: min(92rem, 100%);
+  height: min(48rem, calc(100svh - 2rem));
+  min-height: 34rem;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid rgba(255, 245, 218, 0.16);
+  border-radius: 0.5rem;
+  background:
+    linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.36)),
+    #0f1615;
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.45);
+}
+
+.porch-roof {
+  position: absolute;
+  z-index: 3;
+  top: 7%;
+  left: 6%;
+  width: 88%;
+  height: 9%;
+  border-bottom: 0.45rem solid var(--yellow);
+  background: #ec9c84;
+  box-shadow: 0 1.5rem 2.6rem rgba(37, 18, 8, 0.2);
+}
+
+.porch-wall {
+  position: absolute;
+  inset: 15% 8% 19%;
+  overflow: hidden;
+  border-radius: 0.25rem;
+  background:
+    radial-gradient(circle at 47% 32%, rgba(255, 215, 150, 0.28), transparent 14rem),
+    linear-gradient(90deg, #e58f7c, var(--pink) 45%, #eca98d);
+}
+
+.porch-wall::before,
+.porch-wall::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 21%;
+  border: 0.52rem solid var(--yellow);
+  border-bottom: 0;
+  border-radius: 999px 999px 0 0;
+  opacity: 0.95;
+}
+
+.porch-wall::before {
+  left: 3%;
+}
+
+.porch-wall::after {
+  right: 4%;
+}
+
+.wall-shadow {
+  position: absolute;
+  inset: auto 0 0;
+  height: 21%;
+  background: linear-gradient(180deg, transparent, rgba(99, 46, 33, 0.22));
+}
+
+.porch-window {
+  position: absolute;
+  z-index: 2;
+  width: 23%;
+  height: 22%;
+  top: 32%;
+  border: 0.38rem solid var(--yellow);
+  background: #3e4850;
+  box-shadow: inset 0 0 0 0.2rem rgba(0, 0, 0, 0.18);
+}
+
+.porch-window-left {
+  left: 16%;
+}
+
+.porch-window-right {
+  right: 20%;
+}
+
+.porch-window span {
+  display: block;
+  width: 82%;
+  height: 0.3rem;
+  margin: 0.55rem auto 0;
+  background: #a9a990;
+  opacity: 0.72;
+}
+
+.porch-door {
+  position: absolute;
+  z-index: 2;
+  left: 46.5%;
+  bottom: 0;
+  width: 8%;
+  height: 56%;
+  background:
+    radial-gradient(circle at 78% 45%, var(--yellow) 0 0.14rem, transparent 0.16rem),
+    linear-gradient(90deg, #0d0c0a, #21160f);
+  box-shadow: 0 0 2rem rgba(255, 205, 129, 0.18);
+}
+
+.porch-floor {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  bottom: 8%;
+  height: 19%;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.18) 0 1px, transparent 1px 18%),
+    linear-gradient(180deg, #f3b194, #d98a72);
+  box-shadow: 0 -1.5rem 2rem rgba(96, 37, 24, 0.14);
+}
+
+.porch-plant {
+  position: absolute;
+  z-index: 4;
+  bottom: 12%;
+  width: 9rem;
+  height: 10rem;
+  background:
+    radial-gradient(ellipse at 52% 25%, #2d7c48 0 15%, transparent 16%),
+    radial-gradient(ellipse at 25% 44%, #195f38 0 15%, transparent 16%),
+    radial-gradient(ellipse at 72% 52%, #236c42 0 14%, transparent 15%),
+    radial-gradient(ellipse at 48% 68%, #164b2e 0 13%, transparent 14%);
+  filter: drop-shadow(0 1rem 1rem rgba(0, 0, 0, 0.24));
+}
+
+.porch-chair-visual {
+  position: absolute;
+  z-index: 5;
+  left: 53%;
+  bottom: 17.5%;
+  width: clamp(5.5rem, 12vw, 9.2rem);
+  height: clamp(7rem, 16vw, 12rem);
+  transform: translateX(-50%);
+  border-radius: 0.65rem 0.65rem 0.2rem 0.2rem;
+  background:
+    linear-gradient(90deg, transparent 0 15%, #f7e0c2 15% 85%, transparent 85%),
+    linear-gradient(180deg, #fff0d0 0 45%, transparent 45%);
+  filter: drop-shadow(0 1.25rem 0.8rem rgba(37, 18, 8, 0.22));
+}
+
+.porch-chair-visual::before,
+.porch-chair-visual::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 0.4rem;
+  height: 42%;
+  background: #c49b84;
+}
+
+.porch-chair-visual::before {
+  left: 24%;
+}
+
+.porch-chair-visual::after {
+  right: 24%;
+}
+
+.porch-chair-visual span {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: 34%;
+  height: 24%;
+  border-radius: 0.3rem;
+  background: #f9dfbd;
+}
+
+.porch-camera-visual {
+  position: absolute;
+  z-index: 5;
+  left: 32%;
+  top: 36%;
+  width: clamp(3rem, 6vw, 4.7rem);
+  height: clamp(2rem, 4vw, 3.1rem);
+  border-radius: 0.4rem;
+  background:
+    radial-gradient(circle at 55% 55%, #1c2328 0 20%, #fff4d8 21% 31%, #31383c 32% 44%, transparent 45%),
+    linear-gradient(180deg, #222a2f, #0f1315);
+  box-shadow: 0 0.8rem 1.4rem rgba(0, 0, 0, 0.24);
+}
+
+.porch-camera-visual::before {
+  content: "";
+  position: absolute;
+  left: 12%;
+  top: -22%;
+  width: 28%;
+  height: 24%;
+  border-radius: 0.2rem 0.2rem 0 0;
+  background: #222a2f;
+}
+
+.porch-radio-visual {
+  position: absolute;
+  z-index: 5;
+  right: 26%;
+  top: 35.5%;
+  width: clamp(3.8rem, 7vw, 5.8rem);
+  height: clamp(2.4rem, 4.6vw, 3.7rem);
+  border-radius: 0.42rem;
+  background:
+    radial-gradient(circle at 80% 52%, #f5bf25 0 9%, #23272a 10% 22%, transparent 23%),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.22) 0 5%, transparent 5% 13%),
+    linear-gradient(180deg, #31383d, #14181a);
+  box-shadow: 0 0.8rem 1.4rem rgba(0, 0, 0, 0.24);
+}
+
+.porch-radio-visual span {
+  position: absolute;
+  left: 12%;
+  top: 30%;
+  width: 42%;
+  height: 0.25rem;
+  background: #b9bea3;
+  box-shadow: 0 0.52rem 0 #b9bea3, 0 1.04rem 0 #b9bea3;
+}
+
+.plant-left {
+  left: 10%;
+}
+
+.plant-right {
+  right: 8%;
+}
+
+.object-button {
+  position: absolute;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 0.44rem;
+  min-width: 3.5rem;
+  min-height: 3.5rem;
+  padding: 0.65rem;
+  border: 1px solid rgba(255, 245, 218, 0.44);
+  border-radius: 999px;
+  color: #fff5df;
+  background: rgba(16, 13, 10, 0.44);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 1rem 2rem rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition:
+    transform 150ms ease,
+    border-color 150ms ease,
+    background 150ms ease;
+}
+
+.object-button:hover,
+.object-button:focus-visible {
+  transform: translateY(-0.14rem);
+  border-color: rgba(245, 191, 37, 0.9);
+  background: rgba(38, 25, 15, 0.72);
+}
+
+.object-button span {
+  font-size: 0.86rem;
+  white-space: nowrap;
+}
+
+.object-button.is-active {
+  border-color: var(--yellow);
+  color: #19110b;
+  background: rgba(245, 191, 37, 0.9);
+}
+
+.object-chair {
+  left: 53%;
+  bottom: 27%;
+}
+
+.object-camera {
+  left: 30%;
+  top: 40%;
+}
+
+.object-radio {
+  right: 25%;
+  top: 39%;
+}
+
+.porch-progress {
+  position: absolute;
+  z-index: 9;
+  right: 1rem;
+  bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.42rem;
+  padding: 0.52rem 0.72rem;
+  border: 1px solid rgba(255, 244, 221, 0.18);
+  border-radius: 999px;
+  color: #fff0cc;
+  background: rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(10px);
+}
+
+.media-overlay {
+  position: fixed;
+  z-index: 30;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(245, 191, 37, 0.22), transparent 28rem),
+    linear-gradient(135deg, #140d0b, #3d1a17 44%, #090d12 100%);
+}
+
+.media-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.24;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 3rem 3rem;
+  animation: filmDrift 8s linear infinite;
+}
+
+.clip-orbit {
+  position: absolute;
+  width: min(44rem, 80vw);
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 238, 188, 0.18);
+  border-radius: 50%;
+  animation: rotate 18s linear infinite;
+}
+
+.clip-orbit-two {
+  width: min(32rem, 62vw);
+  animation-duration: 12s;
+  animation-direction: reverse;
+}
+
+.clip-photo-stack {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.clip-photo-stack div {
+  position: absolute;
+  width: clamp(8rem, 18vw, 15rem);
+  aspect-ratio: 0.76;
+  border: 0.75rem solid #fff6df;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.42), transparent),
+    linear-gradient(135deg, var(--pink), var(--yellow));
+  box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.42);
+  animation: photoFloat 5s ease-in-out infinite;
+}
+
+.clip-photo-stack div:nth-child(1) {
+  left: 10%;
+  top: 18%;
+  rotate: -10deg;
+}
+
+.clip-photo-stack div:nth-child(2) {
+  right: 13%;
+  top: 21%;
+  rotate: 8deg;
+  animation-delay: 800ms;
+}
+
+.clip-photo-stack div:nth-child(3) {
+  left: 42%;
+  bottom: 8%;
+  rotate: 4deg;
+  animation-delay: 1400ms;
+}
+
+.clip-content {
+  position: relative;
+  z-index: 2;
+  width: min(46rem, calc(100vw - 2rem));
+  text-align: center;
+}
+
+.clip-content p {
+  margin: 0 0 0.35rem;
+  color: var(--yellow);
+  font-size: clamp(0.76rem, 2vw, 0.95rem);
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.clip-content h1 {
+  margin: 0;
+  color: #fff4d9;
+  font-size: clamp(4.5rem, 17vw, 12rem);
+  line-height: 0.84;
+  letter-spacing: 0;
+  text-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.5);
+}
+
+.clip-content span {
+  display: block;
+  width: min(36rem, 100%);
+  margin: 1.2rem auto 0;
+  color: rgba(255, 246, 228, 0.82);
+  font-size: clamp(0.95rem, 2vw, 1.12rem);
+  line-height: 1.55;
+}
+
+.icon-button,
+.overlay-close {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid rgba(255, 244, 221, 0.28);
+  border-radius: 50%;
+  color: #fff4dc;
+  background: rgba(0, 0, 0, 0.34);
+  cursor: pointer;
+}
+
+.overlay-close {
+  position: absolute;
+  z-index: 5;
+  top: 1rem;
+  right: 1rem;
+}
+
+.memory-screen {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background:
+    radial-gradient(circle at 54% 32%, rgba(245, 191, 37, 0.18), transparent 26rem),
+    linear-gradient(180deg, #071019, #15100c);
+}
+
+.memory-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(18rem, 1.05fr);
+  gap: clamp(1rem, 4vw, 2.4rem);
+  width: min(64rem, calc(100vw - 2rem));
+  min-height: 30rem;
+  padding: clamp(1rem, 3vw, 2rem);
+  border: 1px solid rgba(255, 244, 221, 0.28);
+  border-radius: 0.5rem;
+  color: #27150e;
+  background: #fff1d5;
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.48);
+}
+
+.memory-photo {
+  min-height: 21rem;
+  border: 0.72rem solid #fffaf0;
+  background:
+    linear-gradient(180deg, rgba(8, 14, 21, 0.12), transparent),
+    #ef9f85;
+  box-shadow: 0 1rem 2rem rgba(58, 26, 16, 0.18);
+}
+
+.mini-house {
+  position: relative;
+  width: 88%;
+  height: 50%;
+  margin: 23% auto 0;
+  border-top: 1rem solid var(--yellow);
+  background: var(--pink);
+}
+
+.mini-house::before,
+.mini-house::after,
+.mini-house span {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 18%;
+  height: 72%;
+  border: 0.35rem solid var(--yellow);
+  border-bottom: 0;
+  border-radius: 999px 999px 0 0;
+}
+
+.mini-house::before {
+  left: 5%;
+}
+
+.mini-house span:nth-child(1) {
+  left: 41%;
+}
+
+.mini-house::after {
+  right: 5%;
+}
+
+.memory-copy {
+  align-self: center;
+}
+
+.memory-copy p {
+  margin: 0 0 0.45rem;
+  color: #8a3f32;
+  text-transform: uppercase;
+  font-size: 0.76rem;
+  letter-spacing: 0;
+}
+
+.memory-copy h1 {
+  max-width: 20ch;
+  margin: 0 0 1rem;
+  font-size: clamp(2.2rem, 6vw, 5.2rem);
+  line-height: 0.9;
+  letter-spacing: 0;
+}
+
+.memory-song,
+.memory-footer,
+.memory-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.48rem;
+}
+
+.memory-song {
+  padding: 0.48rem 0.7rem;
+  border-radius: 999px;
+  color: #fff6df;
+  background: #19100b;
+}
+
+.memory-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.2rem;
+}
+
+.memory-list span {
+  padding: 0.46rem 0.62rem;
+  border: 1px solid rgba(39, 21, 14, 0.18);
+  border-radius: 999px;
+  color: #371f15;
+  background: rgba(255, 255, 255, 0.38);
+}
+
+.memory-back {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  min-height: 2.6rem;
+  padding: 0 0.78rem;
+  border: 1px solid rgba(39, 21, 14, 0.2);
+  border-radius: 999px;
+  color: #2b160d;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+.memory-footer {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  padding: 0.58rem 0.78rem;
+  border-radius: 999px;
+  color: rgba(255, 246, 225, 0.72);
+  background: rgba(0, 0, 0, 0.24);
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(245, 191, 37, 0.44);
+  }
+  50% {
+    box-shadow: 0 0 0 0.75rem rgba(245, 191, 37, 0);
+  }
+}
+
+@keyframes rotate {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes filmDrift {
+  to {
+    background-position: 3rem 3rem;
+  }
+}
+
+@keyframes photoFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1.2rem);
+  }
+}
+
+@media (max-width: 760px) {
+  .hotspot-door {
+    left: 55%;
+    top: 54%;
+  }
+
+  .hotspot-chair {
+    left: 76%;
+    top: 60%;
+  }
+
+  .hotspot-window {
+    left: 34%;
+    top: 54%;
+  }
+
+  .porch-screen {
+    padding: 0;
+  }
+
+  .porch-background {
+    width: 100%;
+    height: 100svh;
+    min-height: 100svh;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .porch-wall {
+    inset: 14% 3% 24%;
+  }
+
+  .porch-roof {
+    left: 1%;
+    width: 98%;
+  }
+
+  .porch-window {
+    width: 29%;
+  }
+
+  .porch-window-left {
+    left: 10%;
+  }
+
+  .porch-window-right {
+    right: 10%;
+  }
+
+  .porch-door {
+    left: 45%;
+    width: 11%;
+  }
+
+  .object-button span {
+    display: none;
+  }
+
+  .object-chair {
+    left: 48%;
+    bottom: 31%;
+  }
+
+  .object-camera {
+    left: 18%;
+    top: 41%;
+  }
+
+  .object-radio {
+    right: 17%;
+    top: 41%;
+  }
+
+  .plant-left {
+    left: 0;
+  }
+
+  .plant-right {
+    right: -1rem;
+  }
+
+  .memory-card {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding-bottom: 4.8rem;
+  }
+
+  .memory-photo {
+    min-height: 14rem;
+  }
+
+  .memory-copy h1 {
+    max-width: 12ch;
+  }
+
+  .memory-footer {
+    display: none;
+  }
+}
