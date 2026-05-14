@@ -48,32 +48,462 @@ button {
 .app-shell {
   position: relative;
   overflow: hidden;
-  background: #8c66c7;
+  background: #dcebf4;
 }
 
 .facade-screen {
   position: relative;
   display: grid;
   place-items: center;
-  background: #8c66c7;
-}
-
-.three-stage {
-  position: absolute;
-  inset: 0;
-}
-
-.facade-vignette {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
   background:
-    radial-gradient(circle at 50% 52%, transparent 0 31rem, rgba(19, 40, 20, 0.3) 52rem),
-    linear-gradient(180deg, rgba(255, 248, 213, 0.18), transparent 36%, rgba(7, 18, 8, 0.28));
+    linear-gradient(180deg, #dbeaf3 0 39%, #8fb65c 39% 100%);
+  overflow: hidden;
+}
+
+.facade-screen-2d {
+  isolation: isolate;
+}
+
+.facade-screen-3d {
+  isolation: isolate;
+  background: #8a63c7;
+}
+
+.facade-canvas {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  touch-action: none;
+}
+
+.casita-hotspot-label {
+  display: grid;
+  place-items: center;
+  min-width: 3.25rem;
+  min-height: 2.2rem;
+  padding: 0 0.62rem;
+  border: 1px solid rgba(255, 246, 222, 0.72);
+  border-radius: 999px;
+  color: #1b1109;
+  background: rgba(255, 231, 166, 0.9);
+  box-shadow:
+    0 0.55rem 1.2rem rgba(50, 24, 9, 0.22),
+    0 0 0 0.22rem rgba(255, 200, 42, 0.18);
+  cursor: pointer;
+  font-size: 0.76rem;
+  line-height: 1;
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+  transform: translateY(0);
+  transition:
+    background 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+.casita-hotspot-label:hover,
+.casita-hotspot-label:focus-visible {
+  background: rgba(255, 244, 205, 0.98);
+  box-shadow:
+    0 0.75rem 1.5rem rgba(50, 24, 9, 0.28),
+    0 0 0 0.32rem rgba(255, 200, 42, 0.28);
+  outline: 0;
+  transform: translateY(-0.08rem);
+}
+
+.facade-fallback-actions {
+  position: absolute;
+  z-index: 12;
+  top: 1rem;
+  left: 1rem;
+  display: flex;
+  gap: 0.48rem;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.facade-fallback-actions:focus-within {
+  opacity: 1;
+}
+
+.facade-fallback-actions button {
+  min-height: 2.35rem;
+  padding: 0 0.78rem;
+  border: 1px solid rgba(255, 244, 221, 0.28);
+  border-radius: 999px;
+  color: #fff4dc;
+  background: rgba(0, 0, 0, 0.38);
+  cursor: pointer;
+  pointer-events: auto;
+  backdrop-filter: blur(10px);
+}
+
+.tree-line {
+  position: absolute;
+  z-index: 0;
+  inset: 8% -3% auto;
+  height: 37%;
+  overflow: hidden;
+  opacity: 0.94;
+  pointer-events: none;
+}
+
+.tree-line span {
+  position: absolute;
+  bottom: 0;
+  border-radius: 50% 50% 12% 12%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(108, 152, 76, 0.94), transparent 34%),
+    radial-gradient(circle at 68% 36%, rgba(57, 111, 59, 0.92), transparent 38%),
+    linear-gradient(180deg, #5f8d4c, #2f6d38);
+  filter: blur(0.2px);
+}
+
+.tree-line span:nth-child(1) {
+  left: -4%;
+  width: 34%;
+  height: 78%;
+}
+
+.tree-line span:nth-child(2) {
+  left: 20%;
+  width: 28%;
+  height: 96%;
+}
+
+.tree-line span:nth-child(3) {
+  left: 42%;
+  width: 32%;
+  height: 83%;
+}
+
+.tree-line span:nth-child(4) {
+  left: 66%;
+  width: 28%;
+  height: 100%;
+}
+
+.tree-line span:nth-child(5) {
+  right: -3%;
+  width: 24%;
+  height: 76%;
+}
+
+.grass-field {
+  position: absolute;
+  z-index: 0;
+  inset: 60% 0 0;
+  background:
+    linear-gradient(105deg, rgba(255, 255, 255, 0.12) 0 1px, transparent 1px 28px),
+    linear-gradient(180deg, #79b641, #5c982d);
+  pointer-events: none;
+}
+
+.casita-2d {
+  position: relative;
+  z-index: 1;
+  width: min(96vw, 78rem);
+  aspect-ratio: 2.35 / 1;
+  margin-top: clamp(0.5rem, 4svh, 3rem);
+  filter: drop-shadow(0 1.8rem 1.2rem rgba(47, 69, 32, 0.2));
+  pointer-events: none;
+}
+
+.roof-slab {
+  position: absolute;
+  z-index: 5;
+  top: 4%;
+  left: 1.2%;
+  width: 97.6%;
+  height: 7.8%;
+  background: #f3c31b;
+  box-shadow:
+    0 0.42rem 0 #c88f0c,
+    0 0.9rem 1rem rgba(62, 33, 10, 0.18);
+}
+
+.roof-shadow {
+  position: absolute;
+  z-index: 4;
+  top: 11.4%;
+  left: 4.6%;
+  right: 4.6%;
+  height: 8.6%;
+  background: linear-gradient(180deg, rgba(94, 47, 26, 0.34), rgba(111, 62, 37, 0));
+}
+
+.house-shell {
+  position: absolute;
+  z-index: 2;
+  left: 5%;
+  right: 5%;
+  top: 11%;
+  bottom: 10%;
+  background:
+    linear-gradient(90deg, rgba(179, 89, 76, 0.16), transparent 8% 92%, rgba(116, 53, 48, 0.2)),
+    #eeb09d;
+}
+
+.house-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 236, 205, 0.2), transparent 44%);
+  pointer-events: none;
+}
+
+.arch {
+  position: absolute;
+  z-index: 3;
+  top: 16%;
+  height: 68%;
+  border: clamp(0.32rem, 0.65vw, 0.58rem) solid #e4b31b;
+  border-bottom: 0;
+  border-radius: 999px 999px 0 0;
+  opacity: 0.96;
+}
+
+.arch-left {
+  left: 5.4%;
+  width: 30%;
+}
+
+.arch-center {
+  left: 35.2%;
+  width: 27.2%;
+}
+
+.arch-right {
+  right: 4.4%;
+  width: 25.2%;
+}
+
+.column {
+  position: absolute;
+  z-index: 4;
+  bottom: 0;
+  width: 2.4%;
+  height: 83%;
+  background: #eeb09d;
+  box-shadow:
+    inset 0.34rem 0 rgba(170, 84, 77, 0.12),
+    0.18rem 0 0 rgba(217, 167, 28, 0.28);
+}
+
+.column-left {
+  left: 0.5%;
+}
+
+.column-one {
+  left: 35.4%;
+}
+
+.column-two {
+  left: 62.5%;
+}
+
+.column-right {
+  right: 0.5%;
+}
+
+.window {
+  position: absolute;
+  z-index: 5;
+  border: clamp(0.3rem, 0.55vw, 0.5rem) solid #e2b51d;
+  background: #293037;
+  box-shadow: inset 0 0 0 0.16rem rgba(0, 0, 0, 0.24);
+}
+
+.window::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 49%, rgba(208, 209, 188, 0.5) 49% 51%, transparent 51%);
+}
+
+.window span {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 0.42rem;
+  margin-top: 0.64rem;
+  background: rgba(183, 188, 167, 0.72);
+}
+
+.window-left {
+  left: 14.2%;
+  top: 28%;
+  width: 18.2%;
+  height: 26%;
+}
+
+.window-center {
+  left: 48%;
+  top: 27.5%;
+  width: 16.8%;
+  height: 27%;
+}
+
+.front-door {
+  position: absolute;
+  z-index: 5;
+  left: 37.7%;
+  top: 30%;
+  width: 7%;
+  height: 39%;
+  background:
+    radial-gradient(circle at 82% 48%, #d8a842 0 0.16rem, transparent 0.18rem),
+    linear-gradient(90deg, #3a1c13, #5a2d1b);
+  box-shadow: inset 0.26rem 0 rgba(255, 255, 255, 0.08);
+}
+
+.front-door span {
+  position: absolute;
+  left: 16%;
+  right: 16%;
+  height: 0.12rem;
+  background: rgba(24, 11, 7, 0.38);
+}
+
+.front-door span:nth-child(1) {
+  top: 24%;
+}
+
+.front-door span:nth-child(2) {
+  top: 50%;
+}
+
+.front-door span:nth-child(3) {
+  top: 74%;
+}
+
+.porch-lantern {
+  position: absolute;
+  z-index: 6;
+  left: 45.8%;
+  top: 35%;
+  width: 1.6%;
+  aspect-ratio: 0.7;
+  border-radius: 0.2rem;
+  background: #18110d;
+  box-shadow:
+    0 0.45rem 0.9rem rgba(0, 0, 0, 0.22),
+    inset 0 -0.45rem #f7d28a;
+}
+
+.porch-lantern::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -42%;
+  width: 0.12rem;
+  height: 42%;
+  translate: -50% 0;
+  background: #211611;
+}
+
+.porch-chair-real {
+  position: absolute;
+  z-index: 6;
+  left: 42.1%;
+  top: 56%;
+  width: 5.2%;
+  height: 23%;
+  border: 0.28rem solid #6c4b39;
+  background: #9b7e65;
+}
+
+.porch-chair-real::before,
+.porch-chair-real::after {
+  content: "";
+  position: absolute;
+  bottom: -38%;
+  width: 0.2rem;
+  height: 42%;
+  background: #5c3d2d;
+}
+
+.porch-chair-real::before {
+  left: 18%;
+}
+
+.porch-chair-real::after {
+  right: 18%;
+}
+
+.porch-chair-real span {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 18%;
+  height: 0.18rem;
+  background: #5f4232;
+}
+
+.carport {
+  position: absolute;
+  z-index: 5;
+  right: 6%;
+  top: 39%;
+  width: 18%;
+  height: 38%;
+  overflow: hidden;
+}
+
+.mower {
+  position: absolute;
+  right: 0;
+  bottom: 7%;
+  width: 78%;
+  height: 46%;
+  border-radius: 0.3rem;
+  background:
+    radial-gradient(circle at 24% 90%, #171717 0 12%, transparent 13%),
+    radial-gradient(circle at 78% 90%, #171717 0 12%, transparent 13%),
+    linear-gradient(180deg, #d4542b 0 40%, #1e1e1e 40% 62%, transparent 62%);
+}
+
+.mower span {
+  position: absolute;
+  left: 34%;
+  top: -40%;
+  width: 0.24rem;
+  height: 74%;
+  rotate: -18deg;
+  background: #1e1e1e;
+  transform-origin: bottom;
+}
+
+.porch-floor-real {
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 9%;
+  background: linear-gradient(180deg, #e7ad93, #db987e);
+}
+
+.house-shell::after {
+  content: "";
+  position: absolute;
+  z-index: 7;
+  left: -3%;
+  right: -3%;
+  bottom: -20%;
+  height: 25%;
+  background:
+    radial-gradient(ellipse at 14% 72%, #487d2b 0 3%, transparent 3.2%),
+    radial-gradient(ellipse at 24% 60%, #4f8b31 0 2.2%, transparent 2.4%),
+    radial-gradient(ellipse at 51% 62%, #416f27 0 2.1%, transparent 2.3%),
+    radial-gradient(ellipse at 88% 70%, #376c28 0 2.8%, transparent 3%),
+    linear-gradient(176deg, transparent 0 48%, #6eb139 49% 100%);
 }
 
 .hotspot {
   position: absolute;
+  z-index: 8;
   display: grid;
   place-items: center;
   min-width: 4.8rem;

@@ -16,21 +16,21 @@ The current direction is intentionally fan-facing and experiential, not politica
 
 ## Current Vertical Slice
 
-### 1. Front-Facing 3D Facade
+### 1. Interactive 3D Facade
 
 The opening screen is a full-page Three.js model of La Casita in a toy-like 3D style:
 
 - Purple studio-style background.
-- Front-facing full-casita composition.
 - Pink house body.
-- Chunky yellow roof.
-- Porch arches.
+- Chunky yellow gabled roof.
+- Cream porch floor and steps.
+- Arched porch openings and columns.
 - Louvered windows.
 - Brown front door.
 - Warm porch lamp.
-- Green base, steps, plants, and orange rocking chair.
+- Green base, plants, shrubs, and orange rocking chair.
 
-The facade has invisible interactive regions over the door, chair, and window. They preserve a clean model view while still letting fans interact with the house.
+The facade has 3D-positioned interactive regions over the door, chair, and window. Orbit controls let fans inspect the collectible while keeping the house framed.
 
 ### 2. Porch Room
 
@@ -65,6 +65,8 @@ This proves the souvenir mechanic for a future digital postcard, photo strip, or
 - Vite
 - TypeScript
 - Three.js
+- React Three Fiber
+- Drei
 - Lucide React icons
 - Plain CSS
 
@@ -78,6 +80,7 @@ src/
   data/
     experience.ts
   components/
+    CasitaModel.tsx
     FacadeScene.tsx
     PorchRoom.tsx
     MediaOverlay.tsx
@@ -86,7 +89,8 @@ src/
 
 Important files:
 
-- `src/components/FacadeScene.tsx`: Three.js model for the opening La Casita facade.
+- `src/components/FacadeScene.tsx`: Three.js canvas, camera, lighting, controls, and facade actions.
+- `src/components/CasitaModel.tsx`: Procedural 3D La Casita model and 3D-positioned hotspots.
 - `src/components/PorchRoom.tsx`: Interactive porch scene with three clickable objects.
 - `src/components/MediaOverlay.tsx`: Fullscreen placeholder clip experience.
 - `src/components/MemoryReveal.tsx`: End-state memory card.
