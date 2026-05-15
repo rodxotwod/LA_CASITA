@@ -1,17 +1,6 @@
-import { Html, RoundedBox, useCursor } from '@react-three/drei';
-import { useMemo, useState } from 'react';
+import { RoundedBox } from '@react-three/drei';
+import { useMemo } from 'react';
 import * as THREE from 'three';
-
-type CasitaModelProps = {
-  onEnter: () => void;
-  onHotspot: (id: string) => void;
-};
-
-type HotspotProps = {
-  label: string;
-  onSelect: () => void;
-  position: [number, number, number];
-};
 
 const colors = {
   base: '#6ca326',
@@ -27,45 +16,13 @@ const colors = {
   window: '#473c3a',
   windowFrame: '#756a68',
   yellow: '#ffc51e',
-  yellowDark: '#d99d11',
 };
 
 function Roof() {
-  const geometry = useMemo(() => {
-    const roof = new THREE.BufferGeometry();
-    const vertices = new Float32Array([
-      -3.35, 2.36, 1.95,
-      3.35, 2.36, 1.95,
-      -3.15, 2.3, -1.86,
-      3.15, 2.3, -1.86,
-      -3.08, 3.05, 0,
-      3.08, 2.94, 0,
-    ]);
-    roof.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-    roof.setIndex([
-      0, 1, 5, 0, 5, 4,
-      2, 4, 5, 2, 5, 3,
-      0, 4, 2,
-      1, 3, 5,
-      0, 2, 3, 0, 3, 1,
-    ]);
-    roof.computeVertexNormals();
-    return roof;
-  }, []);
-
   return (
     <group>
-      <mesh geometry={geometry} castShadow receiveShadow>
-        <meshStandardMaterial color={colors.yellow} roughness={0.58} />
-      </mesh>
-      <RoundedBox args={[6.95, 0.22, 0.28]} position={[0, 2.26, 2.03]} radius={0.045} smoothness={5} castShadow>
-        <meshStandardMaterial color={colors.yellow} roughness={0.55} />
-      </RoundedBox>
-      <RoundedBox args={[6.55, 0.18, 0.24]} position={[0, 2.23, -1.93]} radius={0.04} smoothness={5} castShadow>
-        <meshStandardMaterial color={colors.yellowDark} roughness={0.62} />
-      </RoundedBox>
-      <RoundedBox args={[0.28, 0.18, 3.95]} position={[-3.42, 2.22, 0.06]} radius={0.04} smoothness={5} castShadow>
-        <meshStandardMaterial color={colors.yellowDark} roughness={0.62} />
+      <RoundedBox args={[6.95, 0.26, 4.05]} position={[0, 2.43, 0.05]} radius={0.04} smoothness={4}>
+        <meshBasicMaterial color={colors.yellow} toneMapped={false} />
       </RoundedBox>
     </group>
   );
@@ -125,25 +82,11 @@ function Window({ position, side = false, scale = 1 }: { position: [number, numb
   );
 }
 
-function Door({ onEnter }: { onEnter: () => void }) {
-  const [hovered, setHovered] = useState(false);
-  useCursor(hovered);
-
+function Door() {
   return (
-    <group
-      position={[0.4, 0.84, 1.61]}
-      onClick={(event) => {
-        event.stopPropagation();
-        onEnter();
-      }}
-      onPointerOut={() => setHovered(false)}
-      onPointerOver={(event) => {
-        event.stopPropagation();
-        setHovered(true);
-      }}
-    >
+    <group position={[0.4, 0.84, 1.61]}>
       <RoundedBox args={[0.56, 1.36, 0.1]} radius={0.025} smoothness={3} castShadow receiveShadow>
-        <meshStandardMaterial color={hovered ? '#7d3418' : colors.door} roughness={0.72} />
+        <meshStandardMaterial color={colors.door} roughness={0.72} />
       </RoundedBox>
       {[0.3, -0.06, -0.42].map((y) => (
         <mesh key={y} position={[0, y, 0.065]} castShadow>
@@ -214,10 +157,7 @@ function PlantCluster({ position, scale = 1, type }: { position: [number, number
   );
 }
 
-function RockingChair({ onPreview }: { onPreview: () => void }) {
-  const [hovered, setHovered] = useState(false);
-  useCursor(hovered);
-
+function RockingChair() {
   const railGeometry = useMemo(() => {
     const points = [
       new THREE.Vector3(-0.5, -0.34, -0.44),
@@ -232,18 +172,9 @@ function RockingChair({ onPreview }: { onPreview: () => void }) {
       position={[2.36, 0.64, 1.72]}
       rotation-y={-0.22}
       scale={1.15}
-      onClick={(event) => {
-        event.stopPropagation();
-        onPreview();
-      }}
-      onPointerOut={() => setHovered(false)}
-      onPointerOver={(event) => {
-        event.stopPropagation();
-        setHovered(true);
-      }}
     >
       <RoundedBox args={[0.58, 0.1, 0.52]} position={[0, -0.1, 0]} radius={0.05} smoothness={6} castShadow>
-        <meshStandardMaterial color={hovered ? '#f1a21b' : colors.chair} roughness={0.68} />
+        <meshStandardMaterial color={colors.chair} roughness={0.68} />
       </RoundedBox>
       <RoundedBox args={[0.58, 0.72, 0.11]} position={[0, 0.38, -0.2]} radius={0.18} smoothness={10} castShadow>
         <meshStandardMaterial color="#ee9b1d" roughness={0.68} />
@@ -268,24 +199,7 @@ function RockingChair({ onPreview }: { onPreview: () => void }) {
   );
 }
 
-function Hotspot({ label, onSelect, position }: HotspotProps) {
-  return (
-    <Html position={position} center distanceFactor={8} zIndexRange={[12, 0]}>
-      <button
-        className="casita-hotspot-label"
-        type="button"
-        onClick={(event) => {
-          event.stopPropagation();
-          onSelect();
-        }}
-      >
-        {label}
-      </button>
-    </Html>
-  );
-}
-
-export function CasitaModel({ onEnter, onHotspot }: CasitaModelProps) {
+export function CasitaModel() {
   return (
     <group position={[0, -0.34, 0]} rotation-y={-0.1}>
       <RoundedBox args={[6.7, 0.34, 3.75]} position={[0, 0.17, 0]} radius={0.2} smoothness={12} castShadow receiveShadow>
@@ -315,14 +229,14 @@ export function CasitaModel({ onEnter, onHotspot }: CasitaModelProps) {
       <Roof />
       <Arch x={0.36} width={1.26} />
       <Arch x={1.98} width={1.3} />
-      <Door onEnter={onEnter} />
+      <Door />
       <Lamp />
       <Window position={[-1.76, 1.3, 1.55]} scale={1.05} />
       <Window position={[-0.58, 1.28, 1.56]} scale={0.78} />
       <Window position={[1.55, 1.3, 1.57]} scale={0.84} />
       <Window position={[-3.04, 1.32, -0.42]} side scale={1.08} />
       <Window position={[2.58, 1.26, -0.42]} side scale={0.9} />
-      <RockingChair onPreview={() => onHotspot('chair')} />
+      <RockingChair />
 
       <PlantCluster position={[-2.86, 0.35, 1.36]} scale={0.95} type="cactus" />
       <PlantCluster position={[-1.9, 0.34, 1.42]} scale={0.88} type="shrub" />
@@ -331,9 +245,6 @@ export function CasitaModel({ onEnter, onHotspot }: CasitaModelProps) {
       <PlantCluster position={[3.05, 0.35, 1.12]} scale={0.66} type="cactus" />
       <PlantCluster position={[2.82, 0.35, -1.22]} scale={0.72} type="agave" />
 
-      <Hotspot label="Pasa" onSelect={onEnter} position={[0.4, 1.7, 2.05]} />
-      <Hotspot label="Silla" onSelect={() => onHotspot('chair')} position={[2.35, 1.55, 2.05]} />
-      <Hotspot label="Mirar" onSelect={() => onHotspot('window')} position={[-1.78, 1.9, 2]} />
     </group>
   );
 }

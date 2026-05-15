@@ -4,12 +4,6 @@ import { useEffect } from 'react';
 import * as THREE from 'three';
 import { CasitaModel } from './CasitaModel';
 
-type FacadeSceneProps = {
-  onEnter: () => void;
-  onHotspot: (id: string) => void;
-  notice: string | null;
-};
-
 function ResponsiveCamera() {
   const { camera, size } = useThree();
 
@@ -26,9 +20,9 @@ function ResponsiveCamera() {
   return null;
 }
 
-export function FacadeScene({ onEnter, onHotspot, notice }: FacadeSceneProps) {
+export function FacadeScene() {
   return (
-    <section className="facade-screen facade-screen-3d" aria-label="La Casita exterior">
+    <section className="facade-screen" aria-label="La Casita exterior">
       <Canvas
         className="facade-canvas"
         camera={{ fov: 38, position: [4.9, 2.75, 5.8] }}
@@ -51,7 +45,7 @@ export function FacadeScene({ onEnter, onHotspot, notice }: FacadeSceneProps) {
           shadow-mapSize-height={2048}
           shadow-mapSize-width={2048}
         />
-        <CasitaModel onEnter={onEnter} onHotspot={onHotspot} />
+        <CasitaModel />
         <ContactShadows
           blur={2.6}
           color="#43265b"
@@ -71,20 +65,6 @@ export function FacadeScene({ onEnter, onHotspot, notice }: FacadeSceneProps) {
           target={[0, 0.92, 0.25]}
         />
       </Canvas>
-
-      <div className="facade-fallback-actions" aria-label="La Casita actions">
-        <button type="button" onClick={onEnter} aria-label="Enter La Casita">
-          Pasa
-        </button>
-        <button type="button" onClick={() => onHotspot('chair')} aria-label="Preview the porch chair">
-          Silla
-        </button>
-        <button type="button" onClick={() => onHotspot('window')} aria-label="Peek through the window">
-          Mirar
-        </button>
-      </div>
-
-      {notice ? <div className="facade-notice">{notice}</div> : null}
     </section>
   );
 }
