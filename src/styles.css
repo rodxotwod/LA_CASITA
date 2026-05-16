@@ -35,14 +35,44 @@ body {
 .app-shell {
   position: relative;
   overflow: hidden;
-  background: #8a63c7;
+  background: #090806;
+}
+
+.site-header {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  height: 4.25rem;
+  padding: 0 clamp(1rem, 3vw, 2rem);
+  pointer-events: none;
+}
+
+.site-logo {
+  display: grid;
+  place-items: center;
+  min-width: 7rem;
+  height: 3.2rem;
+  padding: 0 1.2rem;
+  border: 1px solid rgba(255, 197, 30, 0.52);
+  border-radius: 0.35rem;
+  color: #ffc51e;
+  background: #6ca326;
+  box-shadow: 0 0.8rem 1.8rem rgba(0, 0, 0, 0.28);
+  font-size: 1.72rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0;
 }
 
 .facade-screen {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background: #8a63c7;
+  background: #090806;
 }
 
 .facade-canvas {

@@ -11,9 +11,9 @@ function ResponsiveCamera() {
     if (!(camera instanceof THREE.PerspectiveCamera)) return;
 
     const isPortrait = size.width / size.height < 0.78;
-    camera.fov = isPortrait ? 64 : 38;
-    camera.position.set(isPortrait ? 6.2 : 4.9, isPortrait ? 3.2 : 2.75, isPortrait ? 12.2 : 5.8);
-    camera.lookAt(0, 0.92, 0.25);
+    camera.fov = isPortrait ? 66 : 44;
+    camera.position.set(isPortrait ? 3.8 : 4.2, isPortrait ? 4.6 : 3.8, isPortrait ? 15.2 : 11.8);
+    camera.lookAt(0, 0.9, 0);
     camera.updateProjectionMatrix();
   }, [camera, size.height, size.width]);
 
@@ -25,19 +25,19 @@ export function FacadeScene() {
     <section className="facade-screen" aria-label="La Casita exterior">
       <Canvas
         className="facade-canvas"
-        camera={{ fov: 38, position: [4.9, 2.75, 5.8] }}
+        camera={{ fov: 44, position: [4.2, 3.8, 11.8] }}
         dpr={[1, 2]}
         shadows
       >
-        <color attach="background" args={['#8a63c7']} />
-        <fog attach="fog" args={['#8a63c7', 10, 22]} />
+        <color attach="background" args={['#090806']} />
+        <fog attach="fog" args={['#090806', 10, 28]} />
         <ResponsiveCamera />
-        <hemisphereLight args={['#fff0d0', '#5c3c86', 2.1]} />
+        <hemisphereLight args={['#ffe6b0', '#050403', 1.35]} />
         <directionalLight
           castShadow
           color="#fff1c7"
-          intensity={4.2}
-          position={[-4.2, 6.4, 5.8]}
+          intensity={4.8}
+          position={[-5.2, 7.2, 6.8]}
           shadow-camera-bottom={-5}
           shadow-camera-left={-5}
           shadow-camera-right={5}
@@ -48,21 +48,21 @@ export function FacadeScene() {
         <CasitaModel />
         <ContactShadows
           blur={2.6}
-          color="#43265b"
-          far={5}
-          opacity={0.35}
+          color="#120c05"
+          far={10}
+          opacity={0.42}
           position={[0, -0.36, 0]}
           resolution={1024}
-          scale={8}
+          scale={18}
         />
         <OrbitControls
           enableDamping
           enablePan={false}
-          maxDistance={14}
-          maxPolarAngle={Math.PI * 0.48}
-          minDistance={4.7}
+          maxDistance={28}
+          maxPolarAngle={Math.PI * 0.49}
+          minDistance={6}
           minPolarAngle={Math.PI * 0.18}
-          target={[0, 0.92, 0.25]}
+          target={[0, 0.9, 0]}
         />
       </Canvas>
     </section>
