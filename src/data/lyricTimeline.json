@@ -4,9 +4,139 @@
       "songId": "DtMF",
       "lyrics": [
         {
-          "startTimestamp": 13,
-          "endTimestamp": 17,
-          "text": "En otra vida en otro mundo puede ser"
+          "startTimestamp": 0,
+          "endTimestamp": 2,
+          "text": "BAILE INoLVIDABLE"
+        },
+        {
+          "startTimestamp": 8,
+          "endTimestamp": 12,
+          "text": "En otra vida en otro mundo podrá ser"
+        },
+        {
+          "startTimestamp": 27,
+          "endTimestamp": 33,
+          "text": "KLOuFRENS"
+        },
+        {
+          "startTimestamp": 36,
+          "endTimestamp": 38,
+          "text": "Cómo diablos vo'a olvidarte?"
+        },
+        {
+          "startTimestamp": 43,
+          "endTimestamp": 45,
+          "text": "Sé que prometí que iba alejarme"
+        },
+        {
+          "startTimestamp": 53,
+          "endTimestamp": 55,
+          "text": "Echulao, puede que se me pase 🤞"
+        },
+        {
+          "startTimestamp": 60,
+          "endTimestamp": 64,
+          "text": "Si cuando estoy solo y prendo lo que hago es pensarte?"
+        },
+        {
+          "startTimestamp": 71,
+          "endTimestamp": 74,
+          "text": "Ese totito era bello, precioso, cute 🔥"
+        },
+        {
+          "startTimestamp": 77,
+          "endTimestamp": 80,
+          "text": "Pelinegra o blondie, ma, tú ere la baby"
+        },
+        {
+          "startTimestamp": 82,
+          "endTimestamp": 87,
+          "text": "EL CLúB"
+        },
+        {
+          "startTimestamp": 94,
+          "endTimestamp": 97,
+          "text": "Que hace tiempo por ahí no se ve?"
+        },
+        {
+          "startTimestamp": 99,
+          "endTimestamp": 102,
+          "text": "Será que ya me superó?"
+        },
+        {
+          "startTimestamp": 105,
+          "endTimestamp": 109,
+          "text": "Mientras que yo, borracho, pienso"
+        },
+        {
+          "startTimestamp": 114,
+          "endTimestamp": 116,
+          "text": "Seguira sola o está saliendo"
+        },
+        {
+          "startTimestamp": 118,
+          "endTimestamp": 121,
+          "text": "Con otro que no soy yo, no soy yo"
+        },
+        {
+          "startTimestamp": 124,
+          "endTimestamp": 127,
+          "text": "Aposté que te olvidaba y perdí quinientos"
+        },
+        {
+          "startTimestamp": 129,
+          "endTimestamp": 132,
+          "text": "VOY A LLeVARTE PA PR"
+        },
+        {
+          "startTimestamp": 137,
+          "endTimestamp": 139,
+          "text": "Dile que esta noche vamo a janguear"
+        },
+        {
+          "startTimestamp": 144,
+          "endTimestamp": 146,
+          "text": "Pero tú te vas a querer quedar"
+        },
+        {
+          "startTimestamp": 154,
+          "endTimestamp": 156,
+          "text": "Despues de mi, vas a borrar Tinder"
+        },
+        {
+          "startTimestamp": 157,
+          "endTimestamp": 158.5,
+          "text": "VelDÁ"
+        },
+        {
+          "startTimestamp": 165,
+          "endTimestamp": 167,
+          "text": "Al otro día me pusiste en los close friends"
+        },
+        {
+          "startTimestamp": 170,
+          "endTimestamp": 172,
+          "text": "de espalda, de lao o de frente"
+        },
+        {
+          "startTimestamp": 185,
+          "endTimestamp": 187,
+          "text": "Vamo a bailar, vamo a beber"
+        },
+        {
+          "startTimestamp": 193,
+          "endTimestamp": 195,
+          "text": "Porque yo soy un problema"
+        },
+        {
+          "startTimestamp": 195,
+          "endTimestamp": 197,
+          "text": "Y porque tu estás buena"
+        },
+        {
+          "startTimestamp": 208,
+          "endTimestamp": 210,
+          "text": "Tu eres una pitcher, mami"
         }
       ]
     }

@@ -23,6 +23,348 @@
               "correct": false
             }
           ]
+        },
+        {
+          "id": "baile_inolvidable-02",
+          "timestamp": 13,
+          "choices": [
+            {
+              "text": "En este solo queda si un dia",
+              "correct": false
+            },
+            {
+              "text": "En esta solo queda irme un dia",
+              "correct": true
+            },
+            {
+              "text": "Pensaba que conmigo iba a amanecer",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "baile_inolvidable-03",
+          "timestamp": 18.5,
+          "choices": [
+            {
+              "text": "Y ver al cielo si te veo volver",
+              "correct": false
+            },
+            {
+              "text": "En este solo queda irme un dia",
+              "correct": false
+            },
+            {
+              "text": "Y ver pal cielo a ver si te veo caer",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "baile_inolvidable-04",
+          "timestamp": 38,
+          "choices": [
+            {
+              "text": "Si te saqué la ropa",
+              "correct": false
+            },
+            {
+              "text": "Si ya te vi sin ropa",
+              "correct": true
+            },
+            {
+              "text": "Y fuiste tu mi baile inolvidable",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "baile_inolvidable-04",
+          "timestamp": 47.5,
+          "choices": [
+            {
+              "text": "Si tu no me saca de la kloudfrends",
+              "correct": true
+            },
+            {
+              "text": "Si ya te vi sin ropa",
+              "correct": false
+            },
+            {
+              "text": "Y fuiste tu mi baile inolvidable",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "baile_inolvidable-04",
+          "timestamp": 65,
+          "choices": [
+            {
+              "text": "Mami me dejaste paralizao",
+              "correct": false
+            },
+            {
+              "text": "Mami me dejaste hipnotizao",
+              "correct": true
+            },
+            {
+              "text": "Mami eres mi baile inolvidable",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "baile_inolvidable-04",
+          "timestamp": 90,
+          "choices": [
+            {
+              "text": "Que estará haciendo su ex?",
+              "correct": false
+            },
+            {
+              "text": "Que estará haciendo mi ex?",
+              "correct": true
+            },
+            {
+              "text": "Que estara haciendo con él?",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "baile_inolvidable-04",
+          "timestamp": 132,
+          "choices": [
+            {
+              "text": "Como es que se perrea",
+              "correct": true
+            },
+            {
+              "text": "Como es que se janguea",
+              "correct": false
+            },
+            {
+              "text": "Como es que se pega",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "baile_inolvidable-04",
+          "timestamp": 148,
+          "choices": [
+            {
+              "text": "Voy a borrar tinder",
+              "correct": false
+            },
+            {
+              "text": "Sin el",
+              "correct": false
+            },
+            {
+              "text": "Single",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "baile_inolvidable-04",
+          "timestamp": 159,
+          "choices": [
+            {
+              "text": "Y te corri atras",
+              "correct": false
+            },
+            {
+              "text": "Y te di follow back",
+              "correct": true
+            },
+            {
+              "text": "Y te di like",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "baile_inolvidable-04",
+          "timestamp": 183,
+          "choices": [
+            {
+              "text": "Vamo a bailar",
+              "correct": true
+            },
+            {
+              "text": "Vamos a perrear",
+              "correct": false
+            },
+            {
+              "text": "Y te di follow back",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "baile_inolvidable-04",
+          "timestamp": 200,
+          "choices": [
+            {
+              "text": "La que es mi nena",
+              "correct": false
+            },
+            {
+              "text": "La que no tengo pero tu estas suelta",
+              "correct": false
+            },
+            {
+              "text": "La que no suelto pero tu estas suelta",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "baile_inolvidable-04",
+          "timestamp": 225,
+          "choices": [
+            {
+              "text": "Mami yo se que tu te vuelves loca",
+              "correct": true
+            },
+            {
+              "text": "Mami yo se que tu te pones loca",
+              "correct": false
+            },
+            {
+              "text": "Mami yo se que tu estas bien loca",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "baile_inolvidable-04",
+          "timestamp": 260,
+          "choices": [
+            {
+              "text": "Y tambien el AP",
+              "correct": true
+            },
+            {
+              "text": "Y tambien yo me fui",
+              "correct": false
+            },
+            {
+              "text": "Y tambien yo te ví",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "baile_inolvidable-05",
+          "timestamp": 281,
+          "choices": [
+            {
+              "text": "Rompe el bajo",
+              "correct": false
+            },
+            {
+              "text": "Rompe la playa siempre que se va",
+              "correct": false
+            },
+            {
+              "text": "Rompe la calle siempre que sale",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "baile_inolvidable-06",
+          "timestamp": 308,
+          "choices": [
+            {
+              "text": "La seguiste mami",
+              "correct": false
+            },
+            {
+              "text": "La seguiste noma",
+              "correct": false
+            },
+            {
+              "text": "La seguiste normal, normal 😭",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "baile_inolvidable-06",
+          "timestamp": 325,
+          "choices": [
+            {
+              "text": "La Shorty de Joel Randy",
+              "correct": false
+            },
+            {
+              "text": "Ay shorty de Jowell y Randy ",
+              "correct": true
+            },
+            {
+              "text": "Ay shorty te pusiste la panty",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "id": "baile_inolvidable-06",
+          "timestamp": 345,
+          "choices": [
+            {
+              "text": "Bebiendo con match",
+              "correct": false
+            },
+            {
+              "text": "Yo no tengo nada",
+              "correct": false
+            },
+            {
+              "text": "Yo no tengo snapchat",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "baile_inolvidable-06",
+          "timestamp": 377,
+          "choices": [
+            {
+              "text": "El tussi con pinta",
+              "correct": false
+            },
+            {
+              "text": "El tussi la misma",
+              "correct": false
+            },
+            {
+              "text": "El tussi racista",
+              "correct": true
+            }
+          ]
+        },
+        {
+          "id": "baile_inolvidable-06",
+          "timestamp": 438,
+          "choices": [
+            {
+              "text": "Un verano contigo",
+              "correct": false
+            },
+            {
+              "text": "Un verano en NuevaYoL",
+              "correct": true
+            },
+            {
+              "text": "Un verano sin ti",
+              "correct": false
+            }
+          ]
         }
       ]
     }
