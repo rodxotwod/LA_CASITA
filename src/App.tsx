@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { FacadeScene } from './components/FacadeScene';
 import type { SingerReaction } from './components/CasitaModel';
-import { getActiveLyric } from './data/lyricTimeline';
+import { getActiveLyric, hasActiveLyricText } from './data/lyricTimeline';
 import { quizSongs, totalQuizStops } from './data/quizConfig';
 
 type GameState = 'idle' | 'countdown' | 'playing' | 'question' | 'finished';
@@ -139,6 +139,7 @@ function App() {
   const activeSong = quizSongs[songIndex];
   const activeQuestion = activeSong?.stops[stopIndex];
   const activeLyric = getActiveLyric(activeSong?.id, playbackTime);
+  const showCloseFriendsRing = gameState === 'playing' && hasActiveLyricText(activeSong?.id, playbackTime, 'KLOuFRENS');
   const totalQuestions = totalQuizStops;
   const controlsFrozen = gameState === 'question';
   const experienceActive = gameState !== 'idle';
@@ -438,6 +439,8 @@ function App() {
           </div>
         </section>
       ) : null}
+
+      {showCloseFriendsRing ? <div className="close-friends-ring" aria-hidden="true" /> : null}
 
       {gameState === 'playing' && activeLyric ? (
         <div className="lyrics-hud" aria-live="polite">

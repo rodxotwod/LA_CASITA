@@ -52,5 +52,14 @@ export function getActiveLyric(songId: string | undefined, currentTime: number) 
   const song = lyricSongs.find((candidate) => candidate.songId === songId);
   if (!song) return null;
 
-  return song.lyrics.find((lyric) => currentTime >= lyric.startTimestamp && currentTime <= lyric.endTimestamp) ?? null;
+  return song.lyrics.filter((lyric) => currentTime >= lyric.startTimestamp && currentTime <= lyric.endTimestamp).at(-1) ?? null;
+}
+
+export function hasActiveLyricText(songId: string | undefined, currentTime: number, text: string) {
+  const song = lyricSongs.find((candidate) => candidate.songId === songId);
+  if (!song) return false;
+
+  return song.lyrics.some(
+    (lyric) => lyric.text === text && currentTime >= lyric.startTimestamp && currentTime <= lyric.endTimestamp,
+  );
 }

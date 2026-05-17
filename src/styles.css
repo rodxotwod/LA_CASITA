@@ -193,6 +193,24 @@ body {
   line-height: 1;
 }
 
+.close-friends-ring {
+  position: fixed;
+  z-index: 4;
+  top: 50%;
+  left: 50%;
+  width: min(78vmin, 44rem);
+  aspect-ratio: 1;
+  border: clamp(0.75rem, 2.4vw, 1.45rem) solid #1bd760;
+  border-radius: 50%;
+  box-shadow:
+    0 0 2rem rgba(27, 215, 96, 0.48),
+    inset 0 0 2.2rem rgba(27, 215, 96, 0.26);
+  opacity: 0.88;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: closeFriendsPulse 1.8s ease-in-out infinite;
+}
+
 @keyframes countdown-pop {
   0%,
   100% {
@@ -203,6 +221,19 @@ body {
   45% {
     transform: scale(1);
     opacity: 1;
+  }
+}
+
+@keyframes closeFriendsPulse {
+  0%,
+  100% {
+    opacity: 0.68;
+    transform: translate(-50%, -50%) scale(0.98);
+  }
+
+  50% {
+    opacity: 0.94;
+    transform: translate(-50%, -50%) scale(1.02);
   }
 }
 
