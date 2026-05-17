@@ -24,6 +24,13 @@ const translations = {
     prompt: 'Prompt',
     question: 'Question',
     score: 'Score',
+    scoreMessages: [
+      { minScore: 19, text: 'You might actually be in Benito’s contacts. Suspiciously elite.' },
+      { minScore: 16, text: 'Real fan behavior. Someone check if the ticket office has your name ready.' },
+      { minScore: 11, text: 'Congratulations, you sort of like Bad Bunny. Very brave, very casual.' },
+      { minScore: 4, text: 'Not terrible. Not concert-line-at-6am material either, but we can work with this.' },
+      { minScore: 0, text: 'You do not deserve concert tickets yet. Respectfully, go stream and come back.' },
+    ],
     share: 'Share score',
     shareError: 'Could not share or copy.',
     shared: 'Shared.',
@@ -48,6 +55,13 @@ const translations = {
     prompt: 'Pregunta',
     question: 'Pregunta',
     score: 'Puntaje',
+    scoreMessages: [
+      { minScore: 19, text: 'Puede que estés en los contactos de Benito. Sospechosamente demasiado bien.' },
+      { minScore: 16, text: 'Comportamiento de fan real. Que alguien revise si tus tickets ya están listos.' },
+      { minScore: 11, text: 'Felicidades, como que te gusta Bad Bunny. Casual, pero con dignidad.' },
+      { minScore: 4, text: 'No estuvo fatal. Todavía no eres persona de fila desde las 6am, pero hay futuro.' },
+      { minScore: 0, text: 'Todavía no mereces tickets. Con cariño: escucha más y vuelve.' },
+    ],
     share: 'Compartir puntaje',
     shareError: 'No se pudo compartir ni copiar.',
     shared: 'Compartido.',
@@ -72,6 +86,13 @@ const translations = {
     prompt: 'Question',
     question: 'Question',
     score: 'Score',
+    scoreMessages: [
+      { minScore: 19, text: 'Tu es peut-être dans les contacts de Benito. Niveau suspect, franchement.' },
+      { minScore: 16, text: 'Vrai comportement de fan. Quelqu’un devrait vérifier si tes billets sont déjà prêts.' },
+      { minScore: 11, text: 'Félicitations, tu aimes plutôt Bad Bunny. Casual, mais respectable.' },
+      { minScore: 4, text: 'Pas catastrophique. Pas encore file-d’attente-à-6h-du-matin, mais il y a du potentiel.' },
+      { minScore: 0, text: 'Tu ne mérites pas encore les billets. Avec respect: révise et reviens.' },
+    ],
     share: 'Partager le score',
     shareError: 'Impossible de partager ou copier.',
     shared: 'Partagé.',
@@ -80,7 +101,7 @@ const translations = {
     startCopy: (total: number) => `Lance le morceau, réponds à ${total} questions synchronisées, puis découvre ton score final.`,
     wrong: 'Ce n’est pas celle-ci. Retour à la chanson.',
   },
-} satisfies Record<Locale, Record<string, string | ((total: number) => string)>>;
+} satisfies Record<Locale, Record<string, string | ((total: number) => string) | { minScore: number; text: string }[]>>;
 
 function getLocale(): Locale {
   const requestedLocale = new URLSearchParams(window.location.search).get('lang')?.toLowerCase();
@@ -116,6 +137,9 @@ function App() {
     if (locale === 'fr') return `J’ai marqué ${score}/${totalQuestions} au défi paroles DtMF La Casita`;
     return `I scored ${score}/${totalQuestions} in the DtMF La Casita lyric challenge`;
   }, [locale, score, totalQuestions]);
+  const scoreMessage = (t.scoreMessages as { minScore: number; text: string }[])
+    .find((message) => score >= message.minScore)?.text ?? '';
+  const shareText = `${resultText}. ${scoreMessage}`;
 
   useEffect(() => {
     return () => {
@@ -270,18 +294,18 @@ function App() {
     try {
       if (navigator.share) {
         await navigator.share({
-          text: resultText,
+          text: shareText,
           title: 'DtMF La Casita lyric challenge',
         });
         setShareStatus('shared');
         return;
       }
 
-      await navigator.clipboard.writeText(resultText);
+      await navigator.clipboard.writeText(shareText);
       setShareStatus('copied');
     } catch {
       try {
-        await navigator.clipboard.writeText(resultText);
+        await navigator.clipboard.writeText(shareText);
         setShareStatus('copied');
       } catch {
         setShareStatus('error');
@@ -396,6 +420,7 @@ function App() {
               <span className="score-brand">DtMF</span>
               <p>{t.challenge}</p>
               <strong>{score} / {totalQuestions}</strong>
+              <em>{scoreMessage}</em>
               <span>{resultText}</span>
             </div>
             <div className="result-actions">

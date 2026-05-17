@@ -409,9 +409,19 @@ body {
 }
 
 .score-card p,
+.score-card em,
 .score-card span {
   margin: 0;
   color: rgba(255, 249, 239, 0.84);
+}
+
+.score-card em {
+  max-width: 34rem;
+  color: #fff9ef;
+  font-size: clamp(1.05rem, 3vw, 1.45rem);
+  font-style: normal;
+  font-weight: 850;
+  line-height: 1.14;
 }
 
 .score-card > span:not(.score-brand) {
