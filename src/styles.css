@@ -495,12 +495,14 @@ body {
   }
 
   .score-dock {
-    right: 0.75rem;
-    left: 0.75rem;
-    justify-content: space-between;
+    right: auto;
+    left: 50%;
+    justify-content: center;
     gap: 0.75rem;
     min-height: 3.7rem;
-    transform: none;
+    width: max-content;
+    max-width: calc(100vw - 1.5rem);
+    transform: translateX(-50%);
   }
 
   .result-actions {
