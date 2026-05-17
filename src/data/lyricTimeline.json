@@ -170,7 +170,7 @@
         },
         {
           "startTimestamp": 301,
-          "endTimestamp": 303,
+          "endTimestamp": 306,
           "text": "KETU TeCRÉ"
         },
         {
@@ -179,8 +179,8 @@
           "text": "Juguetito y ninguno dice Andy"
         },
         {
-          "startTimestamp": 333,
-          "endTimestamp": 335,
+          "startTimestamp": 332,
+          "endTimestamp": 334,
           "text": "Una muñeca buscando un AP"
         },
         {
@@ -192,6 +192,26 @@
           "startTimestamp": 358,
           "endTimestamp": 361,
           "text": "NUEVAYoL"
+        },
+        {
+          "startTimestamp": 387,
+          "endTimestamp": 389,
+          "text": "PR se siente cerquita"
+        },
+        {
+          "startTimestamp": 397,
+          "endTimestamp": 404,
+          "text": "Con reggaeton y dembow"
+        },
+        {
+          "startTimestamp": 419,
+          "endTimestamp": 421,
+          "text": "Estoi en la mia no tengo adversarios"
+        },
+        {
+          "startTimestamp": 427,
+          "endTimestamp": 429,
+          "text": "Si te quieres divertir"
         }
       ]
     }
