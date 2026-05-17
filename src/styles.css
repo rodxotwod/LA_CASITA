@@ -137,9 +137,10 @@ body {
 
 .start-panel h1 {
   color: #ffc51e;
-  font-size: clamp(2rem, 6vw, 3.45rem);
+  font-size: clamp(1.6rem, 4.7vw, 3rem);
   line-height: 0.95;
   margin-bottom: 1.2rem;
+  max-width: 100%;
   white-space: nowrap;
 }
 
