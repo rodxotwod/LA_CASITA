@@ -319,6 +319,16 @@ body {
   white-space: nowrap;
 }
 
+.score-dock-dev-time {
+  min-width: 6.5rem;
+  padding-left: 0.9rem;
+  border-left: 1px solid rgba(255, 249, 239, 0.28);
+}
+
+.score-dock-dev-time strong {
+  font-size: clamp(1.35rem, 4vw, 2rem);
+}
+
 .question-meta {
   display: flex;
   justify-content: space-between;

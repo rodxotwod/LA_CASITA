@@ -108,6 +108,10 @@ function getLocale(): Locale {
   return requestedLocale === 'es' || requestedLocale === 'fr' || requestedLocale === 'en' ? requestedLocale : 'en';
 }
 
+function formatDevSeconds(seconds: number) {
+  return `${seconds.toFixed(1)}s`;
+}
+
 function App() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const resumeTimeoutRef = useRef<number | null>(null);
@@ -353,6 +357,12 @@ function App() {
           <span>{t.score}</span>
           <strong>{score} / {totalQuestions}</strong>
         </div>
+        {import.meta.env.DEV ? (
+          <div className="score-dock-metric score-dock-dev-time">
+            <span>Seconds</span>
+            <strong>{formatDevSeconds(playbackTime)}</strong>
+          </div>
+        ) : null}
       </div>
 
       {gameState === 'idle' ? (
