@@ -414,6 +414,12 @@ body {
   color: rgba(255, 249, 239, 0.84);
 }
 
+.score-card > span:not(.score-brand) {
+  display: block;
+  margin-top: 0.35rem;
+  padding: 0.6rem 0;
+}
+
 .score-card strong {
   color: #ffc51e;
   font-size: clamp(4rem, 18vw, 7rem);
@@ -421,14 +427,19 @@ body {
 }
 
 .score-brand {
-  font-size: 1.35rem;
+  font-size: clamp(1.75rem, 4vw, 2.35rem);
   font-weight: 900;
 }
 
 .result-actions {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.65rem;
+}
+
+.result-actions .primary-action,
+.result-actions .secondary-action {
+  width: 100%;
 }
 
 @media (max-width: 640px) {
@@ -470,5 +481,9 @@ body {
     gap: 0.75rem;
     min-height: 3.7rem;
     transform: none;
+  }
+
+  .result-actions {
+    grid-template-columns: 1fr;
   }
 }
