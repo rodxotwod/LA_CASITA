@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">DtMF La Casita Lyric Challenge</title>
+  <desc id="desc">A social preview cover for the DtMF La Casita lyric guessing game.</desc>
+  <defs>
+    <radialGradient id="spotlight" cx="50%" cy="34%" r="62%">
+      <stop offset="0%" stop-color="#2c2410"/>
+      <stop offset="52%" stop-color="#080706"/>
+      <stop offset="100%" stop-color="#020202"/>
+    </radialGradient>
+    <linearGradient id="panel" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#1a2b12" stop-opacity="0.92"/>
+      <stop offset="100%" stop-color="#0b0a08" stop-opacity="0.96"/>
+    </linearGradient>
+    <linearGradient id="grass" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#315d1c"/>
+      <stop offset="52%" stop-color="#6ca326"/>
+      <stop offset="100%" stop-color="#315d1c"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="softShadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#spotlight)"/>
+
+  <g opacity="0.78">
+    <circle cx="180" cy="484" r="5" fill="#ffc51e"/>
+    <circle cx="230" cy="512" r="4" fill="#55b7ff"/>
+    <circle cx="285" cy="482" r="5" fill="#f7d9a0"/>
+    <circle cx="343" cy="518" r="4" fill="#9d5bd2"/>
+    <circle cx="910" cy="486" r="5" fill="#ffc51e"/>
+    <circle cx="968" cy="520" r="4" fill="#55b7ff"/>
+    <circle cx="1032" cy="490" r="5" fill="#f7d9a0"/>
+    <circle cx="1090" cy="524" r="4" fill="#ff806d"/>
+  </g>
+
+  <g opacity="0.45">
+    <path d="M0 530 C180 485 310 505 440 548 C565 590 733 596 888 548 C1010 511 1112 508 1200 526 L1200 630 L0 630 Z" fill="#080704"/>
+    <g fill="#ffc51e">
+      <rect x="64" y="476" width="6" height="32" rx="3"/>
+      <rect x="92" y="498" width="6" height="34" rx="3"/>
+      <rect x="118" y="464" width="6" height="40" rx="3"/>
+      <rect x="1054" y="466" width="6" height="38" rx="3"/>
+      <rect x="1084" y="496" width="6" height="36" rx="3"/>
+      <rect x="1122" y="474" width="6" height="40" rx="3"/>
+    </g>
+    <g fill="#fff9ef">
+      <circle cx="67" cy="468" r="8"/>
+      <circle cx="95" cy="490" r="8"/>
+      <circle cx="121" cy="456" r="8"/>
+      <circle cx="1057" cy="458" r="8"/>
+      <circle cx="1087" cy="488" r="8"/>
+      <circle cx="1125" cy="466" r="8"/>
+    </g>
+  </g>
+
+  <circle cx="830" cy="324" r="188" fill="none" stroke="#1bd760" stroke-width="22" opacity="0.88" filter="url(#glow)"/>
+
+  <g transform="translate(180 0)" filter="url(#softShadow)">
+    <path d="M338 475 Q600 412 862 475 L826 544 Q600 590 374 544 Z" fill="url(#grass)"/>
+    <rect x="392" y="280" width="416" height="172" rx="14" fill="#f0a083"/>
+    <rect x="360" y="238" width="480" height="52" rx="7" fill="#ffc51e"/>
+    <rect x="390" y="287" width="420" height="15" fill="#5a3320" opacity="0.72"/>
+    <rect x="448" y="335" width="98" height="52" rx="4" fill="#ffc51e"/>
+    <rect x="458" y="345" width="78" height="32" fill="#263236"/>
+    <path d="M458 354 H536 M458 365 H536 M476 345 V377 M510 345 V377" stroke="#f8ddb2" stroke-width="4"/>
+    <rect x="648" y="335" width="98" height="52" rx="4" fill="#ffc51e"/>
+    <rect x="658" y="345" width="78" height="32" fill="#263236"/>
+    <path d="M658 354 H736 M658 365 H736 M676 345 V377 M710 345 V377" stroke="#f8ddb2" stroke-width="4"/>
+    <rect x="576" y="342" width="50" height="86" rx="5" fill="#281409"/>
+    <circle cx="615" cy="386" r="4" fill="#ffc51e"/>
+    <path d="M414 452 H786" stroke="#fff0d6" stroke-width="16" stroke-linecap="round"/>
+    <path d="M419 302 C420 269 453 252 486 252 C520 252 549 274 550 302" fill="none" stroke="#ffd4b6" stroke-width="16"/>
+    <path d="M554 302 C555 262 594 240 632 240 C671 240 704 268 704 302" fill="none" stroke="#ffd4b6" stroke-width="16"/>
+    <path d="M710 302 C711 269 744 252 777 252 C811 252 838 274 840 302" fill="none" stroke="#ffd4b6" stroke-width="16"/>
+  </g>
+
+  <g transform="translate(765 142)" filter="url(#softShadow)">
+    <rect x="0" y="48" width="62" height="74" rx="7" fill="#f4f0e8"/>
+    <rect x="4" y="8" width="54" height="44" rx="8" fill="#b8784d"/>
+    <rect x="4" y="0" width="54" height="16" rx="7" fill="#11100f"/>
+    <rect x="50" y="8" width="16" height="30" rx="6" fill="#11100f"/>
+    <rect x="12" y="122" width="14" height="52" fill="#e8e4d8"/>
+    <rect x="36" y="122" width="14" height="52" fill="#e8e4d8"/>
+    <rect x="9" y="170" width="21" height="8" rx="4" fill="#11100f"/>
+    <rect x="34" y="170" width="21" height="8" rx="4" fill="#11100f"/>
+    <path d="M15 36 Q31 46 48 36" fill="none" stroke="#11100f" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="21" cy="27" r="3" fill="#11100f"/>
+    <circle cx="43" cy="27" r="3" fill="#11100f"/>
+    <path d="M12 32 C18 18 25 48 31 32 C37 18 43 48 50 32" fill="none" stroke="#11100f" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <g transform="translate(80 80)">
+    <rect width="176" height="76" rx="10" fill="#6ca326" stroke="#ffc51e" stroke-width="2"/>
+    <text x="88" y="52" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="43" font-weight="900" fill="#ffc51e">DtMF</text>
+  </g>
+
+  <g transform="translate(80 184)">
+    <rect width="410" height="54" rx="8" fill="#ffc51e"/>
+    <text x="205" y="37" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="25" font-weight="900" fill="#11100f">LA CASITA LYRIC CHALLENGE</text>
+  </g>
+
+  <text x="80" y="312" font-family="Inter, Arial, sans-serif" font-size="68" font-weight="950" fill="#ffc51e">Guess the</text>
+  <text x="80" y="384" font-family="Inter, Arial, sans-serif" font-size="68" font-weight="950" fill="#ffc51e">next line</text>
+  <text x="80" y="438" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="750" fill="#fff9ef">Play the song. Beat the score.</text>
+  <text x="80" y="482" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="650" fill="#d9cfb8">A 3D Bad Bunny-inspired fan challenge.</text>
+
+  <g transform="translate(80 530)">
+    <rect width="256" height="54" rx="8" fill="#6ca326"/>
+    <text x="128" y="36" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="900" fill="#ffffff">START THE EXPERIENCE</text>
+  </g>
+</svg>
