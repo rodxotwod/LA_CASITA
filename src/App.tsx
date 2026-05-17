@@ -4,7 +4,7 @@ import type { SingerReaction } from './components/CasitaModel';
 import { getActiveLyric } from './data/lyricTimeline';
 import { quizSongs, totalQuizStops } from './data/quizConfig';
 
-type GameState = 'idle' | 'playing' | 'question' | 'finished';
+type GameState = 'idle' | 'countdown' | 'playing' | 'question' | 'finished';
 type ShareStatus = 'idle' | 'copied' | 'shared' | 'error';
 type Locale = 'en' | 'es' | 'fr';
 
@@ -119,6 +119,7 @@ function formatDevSeconds(seconds: number) {
 function App() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const resumeTimeoutRef = useRef<number | null>(null);
+  const countdownTimeoutRef = useRef<number | null>(null);
   const [gameState, setGameState] = useState<GameState>('idle');
   const [songIndex, setSongIndex] = useState(0);
   const [stopIndex, setStopIndex] = useState(0);
@@ -131,6 +132,7 @@ function App() {
   const [isManuallyPaused, setIsManuallyPaused] = useState(false);
   const [audioIsPlaying, setAudioIsPlaying] = useState(false);
   const [singerReaction, setSingerReaction] = useState<SingerReaction>(null);
+  const [countdown, setCountdown] = useState(3);
 
   const locale = getLocale();
   const t = translations[locale];
@@ -140,7 +142,7 @@ function App() {
   const totalQuestions = totalQuizStops;
   const controlsFrozen = gameState === 'question';
   const experienceActive = gameState !== 'idle';
-  const songIsPlaying = audioIsPlaying && !isManuallyPaused;
+  const songIsPlaying = gameState === 'playing' && audioIsPlaying && !isManuallyPaused;
   const resultText = useMemo(() => {
     if (locale === 'es') return `Logré ${score}/${totalQuestions} en el reto de letras DtMF La Casita`;
     if (locale === 'fr') return `J’ai marqué ${score}/${totalQuestions} au défi paroles DtMF La Casita`;
@@ -153,6 +155,7 @@ function App() {
   useEffect(() => {
     return () => {
       if (resumeTimeoutRef.current) window.clearTimeout(resumeTimeoutRef.current);
+      if (countdownTimeoutRef.current) window.clearTimeout(countdownTimeoutRef.current);
     };
   }, []);
 
@@ -198,6 +201,7 @@ function App() {
     if (!audio) return;
 
     if (resumeTimeoutRef.current) window.clearTimeout(resumeTimeoutRef.current);
+    if (countdownTimeoutRef.current) window.clearTimeout(countdownTimeoutRef.current);
     setAudioError(null);
     setShareStatus('idle');
     setSongIndex(0);
@@ -207,10 +211,41 @@ function App() {
     setSelectedAnswer(null);
     setPlaybackTime(0);
     setIsManuallyPaused(false);
-    setGameState('playing');
+    setSingerReaction(null);
+    setCountdown(3);
+    setGameState('countdown');
 
     try {
-      await playSong(0);
+      const song = quizSongs[0];
+      if (!song) return;
+
+      if (audio.src !== song.audioSrc) {
+        audio.src = song.audioSrc;
+        audio.load();
+      }
+
+      audio.currentTime = 0;
+      audio.volume = 0;
+      audio.muted = true;
+      await audio.play();
+
+      const runCountdown = (nextCount: number) => {
+        countdownTimeoutRef.current = window.setTimeout(() => {
+          if (nextCount > 0) {
+            setCountdown(nextCount);
+            runCountdown(nextCount - 1);
+            return;
+          }
+
+          audio.currentTime = 0;
+          audio.muted = false;
+          audio.volume = 0.86;
+          setPlaybackTime(0);
+          setGameState('playing');
+        }, 1000);
+      };
+
+      runCountdown(2);
     } catch {
       setGameState('idle');
       setAudioError(t.audioBlocked as string);
@@ -219,7 +254,7 @@ function App() {
 
   const togglePlayback = async () => {
     const audio = audioRef.current;
-    if (!audio || gameState === 'idle' || gameState === 'finished' || gameState === 'question') return;
+    if (!audio || gameState === 'idle' || gameState === 'countdown' || gameState === 'finished' || gameState === 'question') return;
 
     if (audio.paused) {
       try {
@@ -361,7 +396,7 @@ function App() {
         preload="auto"
       />
 
-      {gameState !== 'idle' && gameState !== 'finished' ? (
+      {gameState !== 'idle' && gameState !== 'countdown' && gameState !== 'finished' ? (
         <div className="playback-controls" aria-label="Playback controls">
           <button className="icon-action" type="button" onClick={togglePlayback} disabled={gameState === 'question'}>
             {isManuallyPaused ? t.play : t.pause}
@@ -392,6 +427,14 @@ function App() {
               {t.start}
             </button>
             {audioError ? <p className="status-message is-error">{audioError}</p> : null}
+          </div>
+        </section>
+      ) : null}
+
+      {gameState === 'countdown' ? (
+        <section className="experience-overlay experience-overlay-countdown" aria-label="Countdown">
+          <div className="countdown-panel" aria-live="assertive">
+            <span>{countdown}</span>
           </div>
         </section>
       ) : null}

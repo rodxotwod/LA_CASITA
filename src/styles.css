@@ -98,6 +98,10 @@ body {
     linear-gradient(180deg, rgba(9, 8, 6, 0.16), rgba(9, 8, 6, 0.72));
 }
 
+.experience-overlay-countdown {
+  background: rgba(4, 4, 3, 0.18);
+}
+
 .start-panel,
 .question-panel,
 .result-panel {
@@ -167,6 +171,39 @@ body {
   width: 100%;
   min-height: 3.85rem;
   font-size: clamp(1.08rem, 2.8vw, 1.35rem);
+}
+
+.countdown-panel {
+  display: grid;
+  place-items: center;
+  width: clamp(8rem, 24vw, 13rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 197, 30, 0.34);
+  border-radius: 50%;
+  color: #ffc51e;
+  background:
+    radial-gradient(circle, rgba(108, 163, 38, 0.42), rgba(13, 13, 10, 0.82) 68%);
+  box-shadow: 0 0 3.5rem rgba(255, 197, 30, 0.22);
+  animation: countdown-pop 1s ease-in-out infinite;
+}
+
+.countdown-panel span {
+  font-size: clamp(4.8rem, 15vw, 8.5rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+@keyframes countdown-pop {
+  0%,
+  100% {
+    transform: scale(0.92);
+    opacity: 0.82;
+  }
+
+  45% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .eyebrow,
