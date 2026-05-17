@@ -35,6 +35,7 @@ const translations = {
     shareError: 'Could not share or copy.',
     shared: 'Shared.',
     song: 'Song',
+    soundNote: 'Turn your sound on before starting.',
     start: 'Start the experience',
     startCopy: (total: number) => `Start the track, answer ${total} timed prompts, and see your final score.`,
     wrong: 'Not this one. Back to the song.',
@@ -66,6 +67,7 @@ const translations = {
     shareError: 'No se pudo compartir ni copiar.',
     shared: 'Compartido.',
     song: 'Canción',
+    soundNote: 'Activa el sonido antes de empezar.',
     start: 'Iniciar la experiencia',
     startCopy: (total: number) => `Inicia la canción, responde ${total} preguntas sincronizadas y mira tu puntaje final.`,
     wrong: 'No era esa. Volvemos a la canción.',
@@ -97,6 +99,7 @@ const translations = {
     shareError: 'Impossible de partager ou copier.',
     shared: 'Partagé.',
     song: 'Chanson',
+    soundNote: 'Active le son avant de commencer.',
     start: 'Démarrer l’expérience',
     startCopy: (total: number) => `Lance le morceau, réponds à ${total} questions synchronisées, puis découvre ton score final.`,
     wrong: 'Ce n’est pas celle-ci. Retour à la chanson.',
@@ -370,6 +373,7 @@ function App() {
           <div className="start-panel">
             <span className="eyebrow">{t.challenge}</span>
             <h1>{t.guess}</h1>
+            <p className="sound-note">{t.soundNote}</p>
             <button className="primary-action" type="button" onClick={startExperience}>
               {t.start}
             </button>

@@ -150,6 +150,13 @@ body {
   line-height: 1.55;
 }
 
+.start-panel .sound-note {
+  margin: 0 0 1rem;
+  color: rgba(255, 249, 239, 0.86);
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-weight: 750;
+}
+
 .start-panel .eyebrow {
   display: block;
   margin-bottom: 0.8rem;
