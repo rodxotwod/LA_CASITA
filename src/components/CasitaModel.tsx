@@ -213,15 +213,15 @@ function Singer({
     let bowRotation = 0;
 
     if (currentReaction) {
-      const duration = currentReaction.kind === 'jump' ? 0.65 : 0.85;
+      const duration = currentReaction.kind === 'jump' ? 1.05 : 1.2;
       const progress = (window.performance.now() - currentReaction.startedAt) / 1000 / duration;
 
       if (progress >= 1) {
         reactionRef.current = null;
       } else {
-        const eased = Math.sin(progress * Math.PI);
-        jumpOffset = currentReaction.kind === 'jump' ? eased * 0.54 : 0;
-        bowRotation = currentReaction.kind === 'bow' ? eased * 0.82 : 0;
+        const doublePulse = Math.abs(Math.sin(progress * Math.PI * 2));
+        jumpOffset = currentReaction.kind === 'jump' ? doublePulse * 0.48 : 0;
+        bowRotation = currentReaction.kind === 'bow' ? doublePulse * 0.78 : 0;
       }
     }
 

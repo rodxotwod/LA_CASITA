@@ -36,7 +36,7 @@ const translations = {
     shareError: 'Could not share or copy.',
     shared: 'Shared.',
     song: 'Song',
-    soundNote: 'Turn your sound on before starting.',
+    soundNote: 'Turn your sound on before starting. Drag to rotate La Casita, scroll or pinch to zoom, and use the trackpad to move around the scene.',
     start: 'Start the experience',
     startCopy: (total: number) => `Start the track, answer ${total} timed prompts, and see your final score.`,
     wrong: 'Not this one. Back to the song.',
@@ -68,7 +68,7 @@ const translations = {
     shareError: 'No se pudo compartir ni copiar.',
     shared: 'Compartido.',
     song: 'Canción',
-    soundNote: 'Activa el sonido antes de empezar.',
+    soundNote: 'Activa el sonido antes de empezar. Arrastra para girar La Casita, haz scroll o pellizca para acercar, y usa el trackpad para moverte por la escena.',
     start: 'Iniciar la experiencia',
     startCopy: (total: number) => `Inicia la canción, responde ${total} preguntas sincronizadas y mira tu puntaje final.`,
     wrong: 'No era esa. Volvemos a la canción.',
@@ -100,7 +100,7 @@ const translations = {
     shareError: 'Impossible de partager ou copier.',
     shared: 'Partagé.',
     song: 'Chanson',
-    soundNote: 'Active le son avant de commencer.',
+    soundNote: 'Active le son avant de commencer. Fais glisser pour tourner La Casita, scrolle ou pince pour zoomer, et utilise le trackpad pour te déplacer dans la scène.',
     start: 'Démarrer l’expérience',
     startCopy: (total: number) => `Lance le morceau, réponds à ${total} questions synchronisées, puis découvre ton score final.`,
     wrong: 'Ce n’est pas celle-ci. Retour à la chanson.',
@@ -244,10 +244,6 @@ function App() {
     const nextAnsweredCount = answeredCount + 1;
     setSelectedAnswer(choiceIndex);
     setAnsweredCount(nextAnsweredCount);
-    setSingerReaction((currentReaction) => ({
-      id: (currentReaction?.id ?? 0) + 1,
-      kind: isCorrect ? 'jump' : 'bow',
-    }));
     if (isCorrect) setScore((currentScore) => currentScore + 1);
 
     resumeTimeoutRef.current = window.setTimeout(async () => {
@@ -255,12 +251,19 @@ function App() {
       const audio = audioRef.current;
 
       if (nextAnsweredCount >= totalQuestions) {
+        setStopIndex(nextStopIndex);
+        setSelectedAnswer(null);
         setIsManuallyPaused(false);
-        setGameState('finished');
+        setGameState('playing');
+        setSingerReaction((currentReaction) => ({
+          id: (currentReaction?.id ?? 0) + 1,
+          kind: isCorrect ? 'jump' : 'bow',
+        }));
         try {
           await audio?.play();
         } catch {
           setAudioError(t.audioResumeError as string);
+          setGameState('idle');
         }
         return;
       }
@@ -269,6 +272,10 @@ function App() {
       setSelectedAnswer(null);
       setIsManuallyPaused(false);
       setGameState('playing');
+      setSingerReaction((currentReaction) => ({
+        id: (currentReaction?.id ?? 0) + 1,
+        kind: isCorrect ? 'jump' : 'bow',
+      }));
 
       try {
         await audio?.play();
