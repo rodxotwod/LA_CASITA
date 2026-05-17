@@ -4,6 +4,11 @@ import { useEffect } from 'react';
 import * as THREE from 'three';
 import { CasitaModel } from './CasitaModel';
 
+type FacadeSceneProps = {
+  controlsFrozen?: boolean;
+  singerPerforming?: boolean;
+};
+
 function ResponsiveCamera() {
   const { camera, size } = useThree();
 
@@ -20,7 +25,7 @@ function ResponsiveCamera() {
   return null;
 }
 
-export function FacadeScene() {
+export function FacadeScene({ controlsFrozen = false, singerPerforming = false }: FacadeSceneProps) {
   return (
     <section className="facade-screen" aria-label="La Casita exterior">
       <Canvas
@@ -45,7 +50,7 @@ export function FacadeScene() {
           shadow-mapSize-height={2048}
           shadow-mapSize-width={2048}
         />
-        <CasitaModel />
+        <CasitaModel interactionsDisabled={controlsFrozen} singerPerforming={singerPerforming} />
         <ContactShadows
           blur={2.6}
           color="#120c05"
@@ -57,12 +62,23 @@ export function FacadeScene() {
         />
         <OrbitControls
           enableDamping
-          enablePan={false}
+          enabled={!controlsFrozen}
+          enablePan
+          enableRotate
+          mouseButtons={{
+            LEFT: THREE.MOUSE.ROTATE,
+            MIDDLE: THREE.MOUSE.DOLLY,
+            RIGHT: THREE.MOUSE.PAN,
+          }}
           maxDistance={28}
-          maxPolarAngle={Math.PI * 0.49}
+          maxPolarAngle={Math.PI * 0.82}
           minDistance={6}
-          minPolarAngle={Math.PI * 0.18}
+          minPolarAngle={Math.PI * 0.05}
           target={[0, 0.9, 0]}
+          touches={{
+            ONE: THREE.TOUCH.ROTATE,
+            TWO: THREE.TOUCH.DOLLY_PAN,
+          }}
         />
       </Canvas>
     </section>

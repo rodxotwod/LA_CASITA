@@ -1,5 +1,6 @@
 import { RoundedBox } from '@react-three/drei';
-import { useLayoutEffect, useMemo, useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 const colors = {
@@ -19,6 +20,13 @@ const colors = {
 };
 
 const crowdColors = ['#24212b', '#ffcf7a', '#f26f6f', '#3f7bd5', '#62a25d', '#f2eee2', '#8d5bd1'];
+const singerRoofBounds = {
+  maxX: 3.02,
+  maxZ: 1.66,
+  minX: -3.02,
+  minZ: -1.66,
+  y: 2.64,
+};
 
 type PersonInstance = {
   bodyColor: string;
@@ -83,6 +91,201 @@ function Roof() {
       <mesh position={[0, 2.25, 2.11]} castShadow>
         <boxGeometry args={[6.86, 0.08, 0.09]} />
         <meshStandardMaterial color="#5a3320" roughness={0.78} />
+      </mesh>
+    </group>
+  );
+}
+
+function SingingPulse({ performing }: { performing: boolean }) {
+  const firstRingRef = useRef<THREE.Mesh>(null);
+  const secondRingRef = useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    const rings = [firstRingRef.current, secondRingRef.current];
+
+    rings.forEach((ring, index) => {
+      if (!ring) return;
+
+      const phase = (state.clock.elapsedTime * 2.4 + index * 0.55) % 1;
+      const scale = performing ? 0.55 + phase * 1.25 : 0.18;
+      ring.visible = performing;
+      ring.scale.setScalar(scale);
+      ring.position.z = 0.28 + phase * 0.08;
+
+      const material = ring.material;
+      if (material instanceof THREE.MeshBasicMaterial) {
+        material.opacity = performing ? 0.7 * (1 - phase) : 0;
+      }
+    });
+  });
+
+  return (
+    <group position={[0.3, 1.04, 0.2]} rotation-y={-0.18}>
+      <pointLight color="#ffc51e" distance={1.5} intensity={performing ? 1.4 : 0} />
+      {[firstRingRef, secondRingRef].map((ringRef, index) => (
+        <mesh key={index} ref={ringRef} rotation-x={Math.PI / 2} visible={false}>
+          <torusGeometry args={[0.12, 0.01, 8, 28]} />
+          <meshBasicMaterial color="#ffc51e" transparent opacity={0} toneMapped={false} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+function Singer({
+  active,
+  disabled,
+  onSelect,
+  performing,
+}: {
+  active: boolean;
+  disabled: boolean;
+  onSelect: () => void;
+  performing: boolean;
+}) {
+  const groupRef = useRef<THREE.Group>(null);
+  const micHandRef = useRef<THREE.Mesh>(null);
+  const micRef = useRef<THREE.Mesh>(null);
+  const keysRef = useRef(new Set<string>());
+  const positionRef = useRef(new THREE.Vector3(0, singerRoofBounds.y, 0.24));
+  const directionRef = useRef(0);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!disabled && active && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'KeyW', 'KeyA', 'KeyS', 'KeyD'].includes(event.code)) {
+        event.preventDefault();
+        keysRef.current.add(event.code);
+      }
+    };
+    const handleKeyUp = (event: KeyboardEvent) => keysRef.current.delete(event.code);
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [active, disabled]);
+
+  useFrame((state, delta) => {
+    if (!active || disabled) {
+      keysRef.current.clear();
+    }
+
+    const movement = new THREE.Vector3();
+    const keys = keysRef.current;
+
+    if (keys.has('ArrowUp') || keys.has('KeyW')) movement.z -= 1;
+    if (keys.has('ArrowDown') || keys.has('KeyS')) movement.z += 1;
+    if (keys.has('ArrowLeft') || keys.has('KeyA')) movement.x -= 1;
+    if (keys.has('ArrowRight') || keys.has('KeyD')) movement.x += 1;
+
+    if (movement.lengthSq() > 0) {
+      movement.normalize().multiplyScalar(delta * 1.45);
+      positionRef.current.add(movement);
+      positionRef.current.x = THREE.MathUtils.clamp(positionRef.current.x, singerRoofBounds.minX, singerRoofBounds.maxX);
+      positionRef.current.z = THREE.MathUtils.clamp(positionRef.current.z, singerRoofBounds.minZ, singerRoofBounds.maxZ);
+      directionRef.current = Math.atan2(movement.x, movement.z);
+    }
+
+    if (!groupRef.current) return;
+    const performanceBeat = performing ? Math.sin(state.clock.elapsedTime * 7.2) : 0;
+    groupRef.current.position.copy(positionRef.current);
+    groupRef.current.position.y += performanceBeat * 0.035;
+    groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, directionRef.current, 0.18);
+    groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, performing ? performanceBeat * 0.045 : 0, 0.2);
+
+    if (micHandRef.current) {
+      micHandRef.current.rotation.z = -0.7 + (performing ? performanceBeat * 0.16 : 0);
+      micHandRef.current.position.y = 1.04 + (performing ? performanceBeat * 0.035 : 0);
+    }
+
+    if (micRef.current) {
+      micRef.current.rotation.z = performing ? performanceBeat * 0.08 : 0;
+      micRef.current.position.y = 1.14 + (performing ? performanceBeat * 0.035 : 0);
+    }
+  });
+
+  return (
+    <group
+      ref={groupRef}
+      position={[0, singerRoofBounds.y, 0.24]}
+      scale={0.98}
+      onClick={(event) => {
+        event.stopPropagation();
+        if (disabled) return;
+        onSelect();
+      }}
+    >
+      <RoundedBox args={[0.48, 0.58, 0.32]} position={[0, 0.7, 0]} radius={0.035} smoothness={3} castShadow>
+        <meshStandardMaterial color="#f4f0e8" roughness={0.72} />
+      </RoundedBox>
+      <RoundedBox args={[0.42, 0.34, 0.36]} position={[0, 1.22, 0.02]} radius={0.055} smoothness={4} castShadow>
+        <meshStandardMaterial color="#b8784d" roughness={0.66} />
+      </RoundedBox>
+      <RoundedBox args={[0.44, 0.14, 0.38]} position={[0, 1.44, -0.01]} radius={0.07} smoothness={5} castShadow>
+        <meshStandardMaterial color="#11100f" roughness={0.86} />
+      </RoundedBox>
+      <RoundedBox args={[0.5, 0.15, 0.16]} position={[0, 1.35, 0.02]} radius={0.04} smoothness={4} castShadow>
+        <meshStandardMaterial color="#11100f" roughness={0.86} />
+      </RoundedBox>
+      <mesh position={[-0.09, 1.24, 0.21]} castShadow>
+        <boxGeometry args={[0.055, 0.105, 0.018]} />
+        <meshStandardMaterial color="#0f0c0b" roughness={0.6} />
+      </mesh>
+      <mesh position={[0.09, 1.24, 0.21]} castShadow>
+        <boxGeometry args={[0.055, 0.105, 0.018]} />
+        <meshStandardMaterial color="#0f0c0b" roughness={0.6} />
+      </mesh>
+      <mesh position={[0, 1.12, 0.22]} castShadow>
+        <torusGeometry args={[0.115, 0.012, 8, 28, Math.PI]} />
+        <meshStandardMaterial color="#14100f" roughness={0.62} />
+      </mesh>
+      {[-0.17, -0.12, -0.07, -0.02, 0.03, 0.08, 0.13, 0.18].map((x, index) => (
+        <mesh key={x} position={[x, 1.11 + (index % 3) * 0.035, 0.22]} castShadow>
+          <boxGeometry args={[0.028, 0.028, 0.018]} />
+          <meshStandardMaterial color="#14100f" roughness={0.68} />
+        </mesh>
+      ))}
+      <SingingPulse performing={performing} />
+      <mesh ref={micRef} position={[0.24, 1.14, 0.1]} castShadow>
+        <boxGeometry args={[0.08, 0.24, 0.08]} />
+        <meshStandardMaterial color="#11100f" roughness={0.7} />
+      </mesh>
+      <mesh ref={micHandRef} position={[0.3, 1.04, 0.16]} rotation-z={-0.7} castShadow>
+        <boxGeometry args={[0.16, 0.028, 0.028]} />
+        <meshStandardMaterial color="#11100f" roughness={0.7} />
+      </mesh>
+      <mesh position={[-0.31, 0.75, 0]} rotation-z={-0.08} castShadow>
+        <boxGeometry args={[0.2, 0.5, 0.2]} />
+        <meshStandardMaterial color="#f4f0e8" roughness={0.72} />
+      </mesh>
+      <mesh position={[0.31, 0.75, 0]} rotation-z={0.08} castShadow>
+        <boxGeometry args={[0.2, 0.5, 0.2]} />
+        <meshStandardMaterial color="#f4f0e8" roughness={0.72} />
+      </mesh>
+      <RoundedBox args={[0.22, 0.12, 0.18]} position={[-0.31, 0.44, 0.02]} radius={0.04} smoothness={4} castShadow>
+        <meshStandardMaterial color="#b8784d" roughness={0.66} />
+      </RoundedBox>
+      <RoundedBox args={[0.22, 0.12, 0.18]} position={[0.31, 0.44, 0.02]} radius={0.04} smoothness={4} castShadow>
+        <meshStandardMaterial color="#b8784d" roughness={0.66} />
+      </RoundedBox>
+      <mesh position={[-0.12, 0.2, 0]} castShadow>
+        <boxGeometry args={[0.18, 0.42, 0.2]} />
+        <meshStandardMaterial color="#f4f0e8" roughness={0.74} />
+      </mesh>
+      <mesh position={[0.12, 0.2, 0]} castShadow>
+        <boxGeometry args={[0.18, 0.42, 0.2]} />
+        <meshStandardMaterial color="#f4f0e8" roughness={0.74} />
+      </mesh>
+      <mesh position={[-0.12, -0.06, 0.04]} castShadow>
+        <boxGeometry args={[0.2, 0.08, 0.26]} />
+        <meshStandardMaterial color="#171717" roughness={0.86} />
+      </mesh>
+      <mesh position={[0.12, -0.06, 0.04]} castShadow>
+        <boxGeometry args={[0.2, 0.08, 0.26]} />
+        <meshStandardMaterial color="#171717" roughness={0.86} />
       </mesh>
     </group>
   );
@@ -462,9 +665,72 @@ function RockingChair() {
   );
 }
 
-export function CasitaModel() {
+export function CasitaModel({
+  interactionsDisabled = false,
+  singerPerforming = false,
+}: {
+  interactionsDisabled?: boolean;
+  singerPerforming?: boolean;
+}) {
+  const sceneRef = useRef<THREE.Group>(null);
+  const sceneRotationRef = useRef(-0.1);
+  const scenePitchRef = useRef(0);
+  const rotateKeysRef = useRef(new Set<string>());
+  const [singerControlActive, setSingerControlActive] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === 'Escape') {
+        setSingerControlActive(false);
+        rotateKeysRef.current.clear();
+        return;
+      }
+
+      if (!interactionsDisabled && !singerControlActive && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.code)) {
+        event.preventDefault();
+        rotateKeysRef.current.add(event.code);
+      }
+    };
+    const handleKeyUp = (event: KeyboardEvent) => rotateKeysRef.current.delete(event.code);
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [interactionsDisabled, singerControlActive]);
+
+  useFrame((_, delta) => {
+    if (!sceneRef.current) return;
+
+    if (interactionsDisabled) {
+      rotateKeysRef.current.clear();
+      return;
+    }
+
+    const rotationSpeed = 1.45;
+    if (rotateKeysRef.current.has('ArrowLeft')) sceneRotationRef.current += delta * rotationSpeed;
+    if (rotateKeysRef.current.has('ArrowRight')) sceneRotationRef.current -= delta * rotationSpeed;
+    if (rotateKeysRef.current.has('ArrowUp')) scenePitchRef.current += delta * rotationSpeed * 0.52;
+    if (rotateKeysRef.current.has('ArrowDown')) scenePitchRef.current -= delta * rotationSpeed * 0.52;
+
+    scenePitchRef.current = THREE.MathUtils.clamp(scenePitchRef.current, -0.38, 0.34);
+
+    sceneRef.current.rotation.y = THREE.MathUtils.lerp(sceneRef.current.rotation.y, sceneRotationRef.current, 0.16);
+    sceneRef.current.rotation.x = THREE.MathUtils.lerp(sceneRef.current.rotation.x, scenePitchRef.current, 0.16);
+  });
+
   return (
-    <group position={[0, -0.34, 0]} rotation-y={-0.1}>
+    <group
+      ref={sceneRef}
+      position={[0, -0.34, 0]}
+      rotation-y={-0.1}
+      onClick={() => {
+        if (!interactionsDisabled) setSingerControlActive(true);
+      }}
+    >
       <StadiumCrowd />
       <RoundedBox args={[7.15, 0.34, 3.95]} position={[0, 0.17, 0]} radius={0.12} smoothness={8} castShadow receiveShadow>
         <meshStandardMaterial color={colors.base} roughness={0.82} />
@@ -484,6 +750,12 @@ export function CasitaModel() {
       </RoundedBox>
 
       <Roof />
+      <Singer
+        active={singerControlActive}
+        disabled={interactionsDisabled}
+        onSelect={() => setSingerControlActive(true)}
+        performing={singerPerforming}
+      />
       <FrontArch x={-2.35} width={1.22} />
       <FrontArch x={-0.05} width={1.78} />
       <FrontArch x={2.25} width={1.3} />
