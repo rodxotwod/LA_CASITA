@@ -336,7 +336,6 @@ function App() {
           <div className="start-panel">
             <span className="eyebrow">{t.challenge}</span>
             <h1>{t.guess}</h1>
-            <p>{(t.startCopy as (total: number) => string)(totalQuestions)}</p>
             <button className="primary-action" type="button" onClick={startExperience}>
               {t.start}
             </button>

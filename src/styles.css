@@ -156,6 +156,8 @@ body {
 
 .start-panel .primary-action {
   width: 100%;
+  min-height: 3.85rem;
+  font-size: clamp(1.08rem, 2.8vw, 1.35rem);
 }
 
 .eyebrow,
