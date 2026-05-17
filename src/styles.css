@@ -110,6 +110,20 @@ body {
   backdrop-filter: blur(14px);
 }
 
+.question-panel.is-correct {
+  border-color: rgba(108, 163, 38, 0.95);
+  background:
+    linear-gradient(180deg, rgba(108, 163, 38, 0.24), rgba(108, 163, 38, 0.34)),
+    rgba(13, 13, 10, 0.82);
+}
+
+.question-panel.is-wrong {
+  border-color: rgba(255, 105, 88, 0.95);
+  background:
+    linear-gradient(180deg, rgba(255, 105, 88, 0.18), rgba(255, 105, 88, 0.3)),
+    rgba(13, 13, 10, 0.82);
+}
+
 .start-panel,
 .question-panel {
   padding: clamp(1rem, 3vw, 1.5rem);
@@ -364,17 +378,11 @@ body {
   opacity: 0.48;
 }
 
-.feedback,
 .status-message {
   margin: 0.85rem 0 0;
   color: rgba(255, 249, 239, 0.78);
 }
 
-.feedback.is-correct {
-  color: #bdf28b;
-}
-
-.feedback.is-wrong,
 .status-message.is-error {
   color: #ffb0a6;
 }

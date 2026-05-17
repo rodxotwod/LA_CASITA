@@ -100,6 +100,7 @@ function App() {
   const [shareStatus, setShareStatus] = useState<ShareStatus>('idle');
   const [playbackTime, setPlaybackTime] = useState(0);
   const [isManuallyPaused, setIsManuallyPaused] = useState(false);
+  const [audioIsPlaying, setAudioIsPlaying] = useState(false);
 
   const locale = getLocale();
   const t = translations[locale];
@@ -109,7 +110,7 @@ function App() {
   const totalQuestions = totalQuizStops;
   const controlsFrozen = gameState === 'question';
   const experienceActive = gameState !== 'idle';
-  const songIsPlaying = gameState === 'playing' && !isManuallyPaused;
+  const songIsPlaying = audioIsPlaying && !isManuallyPaused;
   const resultText = useMemo(() => {
     if (locale === 'es') return `Logré ${score}/${totalQuestions} en el reto de letras DtMF La Casita`;
     if (locale === 'fr') return `J’ai marqué ${score}/${totalQuestions} au défi paroles DtMF La Casita`;
@@ -217,11 +218,13 @@ function App() {
       const audio = audioRef.current;
 
       if (nextAnsweredCount >= totalQuestions) {
-        if (audio) {
-          audio.pause();
-          audio.currentTime = 0;
-        }
+        setIsManuallyPaused(false);
         setGameState('finished');
+        try {
+          await audio?.play();
+        } catch {
+          setAudioError(t.audioResumeError as string);
+        }
         return;
       }
 
@@ -288,14 +291,30 @@ function App() {
 
   const selectedIsCorrect = activeQuestion && selectedAnswer === activeQuestion.correctIndex;
   const activeQuestionNumber = selectedAnswer === null ? answeredCount + 1 : answeredCount;
+  const questionStateClass = selectedAnswer === null
+    ? ''
+    : selectedIsCorrect
+      ? 'is-correct'
+      : 'is-wrong';
 
   return (
     <main className="app-shell">
       <header className="site-header" aria-label="DtMF">
         <div className="site-logo">DtMF</div>
       </header>
-      <FacadeScene controlsFrozen={controlsFrozen} experienceActive={experienceActive} singerPerforming={songIsPlaying} />
-      <audio ref={audioRef} onEnded={handleSongEnded} preload="auto" />
+      <FacadeScene
+        controlsFrozen={controlsFrozen}
+        experienceActive={experienceActive}
+        showConfetti={gameState === 'finished'}
+        singerPerforming={songIsPlaying}
+      />
+      <audio
+        ref={audioRef}
+        onEnded={handleSongEnded}
+        onPause={() => setAudioIsPlaying(false)}
+        onPlay={() => setAudioIsPlaying(true)}
+        preload="auto"
+      />
 
       {gameState !== 'idle' && gameState !== 'finished' ? (
         <div className="playback-controls" aria-label="Playback controls">
@@ -336,7 +355,7 @@ function App() {
 
       {gameState === 'question' && activeQuestion ? (
         <section className="experience-overlay" aria-label={t.lyricQuestion as string}>
-          <div className="question-panel">
+          <div className={`question-panel ${questionStateClass}`}>
             <div className="question-meta">
               <span>{t.question} {activeQuestionNumber}/{totalQuestions}</span>
               <span>{t.score} {score}/{totalQuestions}</span>
@@ -367,11 +386,6 @@ function App() {
                 );
               })}
             </div>
-            {selectedAnswer !== null ? (
-              <p className={`feedback ${selectedIsCorrect ? 'is-correct' : 'is-wrong'}`}>
-                {selectedIsCorrect ? t.correct : t.wrong}
-              </p>
-            ) : null}
           </div>
         </section>
       ) : null}

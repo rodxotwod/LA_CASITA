@@ -7,6 +7,7 @@ import { CasitaModel } from './CasitaModel';
 type FacadeSceneProps = {
   controlsFrozen?: boolean;
   experienceActive?: boolean;
+  showConfetti?: boolean;
   singerPerforming?: boolean;
 };
 
@@ -33,6 +34,7 @@ function ResponsiveCamera({ experienceActive }: { experienceActive: boolean }) {
 export function FacadeScene({
   controlsFrozen = false,
   experienceActive = false,
+  showConfetti = false,
   singerPerforming = false,
 }: FacadeSceneProps) {
   return (
@@ -59,7 +61,7 @@ export function FacadeScene({
           shadow-mapSize-height={2048}
           shadow-mapSize-width={2048}
         />
-        <CasitaModel interactionsDisabled={controlsFrozen} singerPerforming={singerPerforming} />
+        <CasitaModel interactionsDisabled={controlsFrozen} showConfetti={showConfetti} singerPerforming={singerPerforming} />
         <ContactShadows
           blur={2.6}
           color="#120c05"

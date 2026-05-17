@@ -665,11 +665,73 @@ function RockingChair() {
   );
 }
 
+const confettiColors = ['#ffc51e', '#6ca326', '#f26f6f', '#3f7bd5', '#f2eee2', '#d98513'];
+
+function Confetti({ active }: { active: boolean }) {
+  const meshRef = useRef<THREE.InstancedMesh>(null);
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const pieces = useMemo(
+    () => Array.from({ length: 180 }, (_, index) => ({
+      color: new THREE.Color(confettiColors[index % confettiColors.length]),
+      drift: Math.sin(index * 5.17) * 0.8,
+      phase: (Math.sin(index * 12.989) * 43758.5453) % 1,
+      speed: 0.12 + (index % 7) * 0.018,
+      spin: 1.2 + (index % 9) * 0.28,
+      x: -5.2 + ((index * 1.73) % 10.4),
+      z: -2.9 + ((index * 2.37) % 5.8),
+    })),
+    [],
+  );
+
+  useLayoutEffect(() => {
+    if (!meshRef.current) return;
+
+    pieces.forEach((piece, index) => meshRef.current?.setColorAt(index, piece.color));
+    if (meshRef.current.instanceColor) meshRef.current.instanceColor.needsUpdate = true;
+  }, [pieces]);
+
+  useFrame((state) => {
+    const mesh = meshRef.current;
+    if (!mesh) return;
+
+    mesh.visible = active;
+    if (!active) return;
+
+    pieces.forEach((piece, index) => {
+      const fall = (state.clock.elapsedTime * piece.speed + Math.abs(piece.phase)) % 1;
+      dummy.position.set(
+        piece.x + Math.sin(state.clock.elapsedTime * 1.3 + index) * piece.drift,
+        5.3 - fall * 5.5,
+        piece.z + Math.cos(state.clock.elapsedTime * 1.1 + index) * 0.38,
+      );
+      dummy.rotation.set(
+        state.clock.elapsedTime * piece.spin + index,
+        state.clock.elapsedTime * piece.spin * 0.7,
+        state.clock.elapsedTime * piece.spin * 1.15,
+      );
+      dummy.scale.set(0.08, 0.018, 0.038);
+      dummy.updateMatrix();
+      mesh.setMatrixAt(index, dummy.matrix);
+    });
+
+    mesh.instanceMatrix.needsUpdate = true;
+  });
+
+  return (
+    <instancedMesh ref={meshRef} args={[undefined, undefined, pieces.length]} visible={false}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshBasicMaterial toneMapped={false} vertexColors />
+    </instancedMesh>
+  );
+}
+
 export function CasitaModel({
   interactionsDisabled = false,
+  showConfetti = false,
   singerPerforming = false,
 }: {
   interactionsDisabled?: boolean;
+  showConfetti?: boolean;
   singerPerforming?: boolean;
 }) {
   const sceneRef = useRef<THREE.Group>(null);
@@ -732,6 +794,7 @@ export function CasitaModel({
       }}
     >
       <StadiumCrowd />
+      <Confetti active={showConfetti} />
       <RoundedBox args={[7.15, 0.34, 3.95]} position={[0, 0.17, 0]} radius={0.12} smoothness={8} castShadow receiveShadow>
         <meshStandardMaterial color={colors.base} roughness={0.82} />
       </RoundedBox>
