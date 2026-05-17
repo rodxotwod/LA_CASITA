@@ -139,7 +139,7 @@ body {
   color: #ffc51e;
   font-size: clamp(2rem, 6vw, 3.45rem);
   line-height: 0.95;
-  margin-bottom: 0.8rem;
+  margin-bottom: 1.2rem;
   white-space: nowrap;
 }
 
