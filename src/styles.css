@@ -134,6 +134,15 @@ body {
   line-height: 1.55;
 }
 
+.start-panel .eyebrow {
+  display: block;
+  margin-bottom: 0.8rem;
+}
+
+.start-panel .primary-action {
+  width: 100%;
+}
+
 .eyebrow,
 .question-meta,
 .game-hud {
