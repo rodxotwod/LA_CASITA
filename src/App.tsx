@@ -29,7 +29,6 @@ const translations = {
     song: 'Song',
     start: 'Start the experience',
     startCopy: (total: number) => `Start the track, answer ${total} timed prompts, and see your final score.`,
-    stop: 'Stop',
     time: 'Time',
     wrong: 'Not this one. Back to the song.',
   },
@@ -55,7 +54,6 @@ const translations = {
     song: 'Canción',
     start: 'Iniciar la experiencia',
     startCopy: (total: number) => `Inicia la canción, responde ${total} preguntas sincronizadas y mira tu puntaje final.`,
-    stop: 'Detener',
     time: 'Tiempo',
     wrong: 'No era esa. Volvemos a la canción.',
   },
@@ -81,7 +79,6 @@ const translations = {
     song: 'Chanson',
     start: 'Démarrer l’expérience',
     startCopy: (total: number) => `Lance le morceau, réponds à ${total} questions synchronisées, puis découvre ton score final.`,
-    stop: 'Arrêter',
     time: 'Temps',
     wrong: 'Ce n’est pas celle-ci. Retour à la chanson.',
   },
@@ -212,19 +209,6 @@ function App() {
     setIsManuallyPaused(true);
   };
 
-  const stopPlayback = () => {
-    const audio = audioRef.current;
-    if (!audio || gameState === 'idle' || gameState === 'finished') return;
-
-    if (resumeTimeoutRef.current) window.clearTimeout(resumeTimeoutRef.current);
-    audio.pause();
-    audio.currentTime = 0;
-    setPlaybackTime(0);
-    setIsManuallyPaused(true);
-    setSelectedAnswer(null);
-    setGameState('playing');
-  };
-
   const chooseAnswer = (choiceIndex: number) => {
     if (selectedAnswer !== null || !activeQuestion) return;
 
@@ -323,9 +307,6 @@ function App() {
         <div className="playback-controls" aria-label="Playback controls">
           <button className="icon-action" type="button" onClick={togglePlayback} disabled={gameState === 'question'}>
             {isManuallyPaused ? t.play : t.pause}
-          </button>
-          <button className="icon-action" type="button" onClick={stopPlayback}>
-            {t.stop}
           </button>
         </div>
       ) : null}
