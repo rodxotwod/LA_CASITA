@@ -1,8 +1,10 @@
 import lyricTimelineConfig from './lyricTimeline.json';
 
 type RawLyricEntry = {
+  endTimestamp?: number;
+  startTimestamp?: number;
   text: string;
-  timestamp: number;
+  timestamp?: number;
 };
 
 type RawSongLyrics = {
@@ -15,23 +17,40 @@ type RawLyricTimeline = {
 };
 
 export type LyricEntry = {
+  endTimestamp: number;
+  startTimestamp: number;
   text: string;
-  timestamp: number;
 };
+
+function normalizeLyric(lyric: RawLyricEntry): LyricEntry | null {
+  const startTimestamp = lyric.startTimestamp ?? lyric.timestamp;
+
+  if (typeof startTimestamp !== 'number' || typeof lyric.endTimestamp !== 'number') {
+    return null;
+  }
+
+  if (lyric.endTimestamp <= startTimestamp || lyric.text.trim().length === 0) {
+    return null;
+  }
+
+  return {
+    endTimestamp: lyric.endTimestamp,
+    startTimestamp,
+    text: lyric.text,
+  };
+}
 
 const lyricSongs = (lyricTimelineConfig as RawLyricTimeline).songs.map((song) => ({
   ...song,
   lyrics: [...song.lyrics]
-    .filter((lyric) => lyric.text.trim().length > 0)
-    .sort((first, second) => first.timestamp - second.timestamp),
+    .map(normalizeLyric)
+    .filter((lyric): lyric is LyricEntry => lyric !== null)
+    .sort((first, second) => first.startTimestamp - second.startTimestamp),
 }));
 
 export function getActiveLyric(songId: string | undefined, currentTime: number) {
   const song = lyricSongs.find((candidate) => candidate.songId === songId);
   if (!song) return null;
 
-  return song.lyrics.reduce<LyricEntry | null>((activeLyric, lyric) => {
-    if (lyric.timestamp > currentTime) return activeLyric;
-    return lyric;
-  }, null);
+  return song.lyrics.find((lyric) => currentTime >= lyric.startTimestamp && currentTime <= lyric.endTimestamp) ?? null;
 }

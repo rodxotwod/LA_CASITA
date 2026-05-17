@@ -2,7 +2,13 @@
   "songs": [
     {
       "songId": "DtMF",
-      "lyrics": []
+      "lyrics": [
+        {
+          "startTimestamp": 13,
+          "endTimestamp": 17,
+          "text": "En otra vida en otro mundo puede ser"
+        }
+      ]
     }
   ]
 }
