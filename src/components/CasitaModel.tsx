@@ -132,16 +132,23 @@ function SingingPulse({ performing }: { performing: boolean }) {
   );
 }
 
+export type SingerReaction = {
+  id: number;
+  kind: 'jump' | 'bow';
+} | null;
+
 function Singer({
   active,
   disabled,
   onSelect,
   performing,
+  reaction,
 }: {
   active: boolean;
   disabled: boolean;
   onSelect: () => void;
   performing: boolean;
+  reaction: SingerReaction;
 }) {
   const groupRef = useRef<THREE.Group>(null);
   const micHandRef = useRef<THREE.Mesh>(null);
@@ -149,6 +156,16 @@ function Singer({
   const keysRef = useRef(new Set<string>());
   const positionRef = useRef(new THREE.Vector3(0, singerRoofBounds.y, 0.24));
   const directionRef = useRef(0);
+  const reactionRef = useRef<{ id: number; kind: 'jump' | 'bow'; startedAt: number } | null>(null);
+
+  useEffect(() => {
+    if (!reaction) return;
+    reactionRef.current = {
+      id: reaction.id,
+      kind: reaction.kind,
+      startedAt: window.performance.now(),
+    };
+  }, [reaction]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -191,8 +208,26 @@ function Singer({
 
     if (!groupRef.current) return;
     const performanceBeat = performing ? Math.sin(state.clock.elapsedTime * 7.2) : 0;
+    const currentReaction = reactionRef.current;
+    let jumpOffset = 0;
+    let bowRotation = 0;
+
+    if (currentReaction) {
+      const duration = currentReaction.kind === 'jump' ? 0.65 : 0.85;
+      const progress = (window.performance.now() - currentReaction.startedAt) / 1000 / duration;
+
+      if (progress >= 1) {
+        reactionRef.current = null;
+      } else {
+        const eased = Math.sin(progress * Math.PI);
+        jumpOffset = currentReaction.kind === 'jump' ? eased * 0.54 : 0;
+        bowRotation = currentReaction.kind === 'bow' ? eased * 0.82 : 0;
+      }
+    }
+
     groupRef.current.position.copy(positionRef.current);
-    groupRef.current.position.y += performanceBeat * 0.035;
+    groupRef.current.position.y += performanceBeat * 0.035 + jumpOffset;
+    groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, bowRotation, 0.28);
     groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, directionRef.current, 0.18);
     groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, performing ? performanceBeat * 0.045 : 0, 0.2);
 
@@ -729,10 +764,12 @@ export function CasitaModel({
   interactionsDisabled = false,
   showConfetti = false,
   singerPerforming = false,
+  singerReaction = null,
 }: {
   interactionsDisabled?: boolean;
   showConfetti?: boolean;
   singerPerforming?: boolean;
+  singerReaction?: SingerReaction;
 }) {
   const sceneRef = useRef<THREE.Group>(null);
   const sceneRotationRef = useRef(-0.1);
@@ -818,6 +855,7 @@ export function CasitaModel({
         disabled={interactionsDisabled}
         onSelect={() => setSingerControlActive(true)}
         performing={singerPerforming}
+        reaction={singerReaction}
       />
       <FrontArch x={-2.35} width={1.22} />
       <FrontArch x={-0.05} width={1.78} />

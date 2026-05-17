@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { FacadeScene } from './components/FacadeScene';
+import type { SingerReaction } from './components/CasitaModel';
 import { getActiveLyric } from './data/lyricTimeline';
 import { quizSongs, totalQuizStops } from './data/quizConfig';
 
@@ -129,6 +130,7 @@ function App() {
   const [playbackTime, setPlaybackTime] = useState(0);
   const [isManuallyPaused, setIsManuallyPaused] = useState(false);
   const [audioIsPlaying, setAudioIsPlaying] = useState(false);
+  const [singerReaction, setSingerReaction] = useState<SingerReaction>(null);
 
   const locale = getLocale();
   const t = translations[locale];
@@ -242,6 +244,10 @@ function App() {
     const nextAnsweredCount = answeredCount + 1;
     setSelectedAnswer(choiceIndex);
     setAnsweredCount(nextAnsweredCount);
+    setSingerReaction((currentReaction) => ({
+      id: (currentReaction?.id ?? 0) + 1,
+      kind: isCorrect ? 'jump' : 'bow',
+    }));
     if (isCorrect) setScore((currentScore) => currentScore + 1);
 
     resumeTimeoutRef.current = window.setTimeout(async () => {
@@ -338,6 +344,7 @@ function App() {
         experienceActive={experienceActive}
         showConfetti={gameState === 'finished'}
         singerPerforming={songIsPlaying}
+        singerReaction={singerReaction}
       />
       <audio
         ref={audioRef}

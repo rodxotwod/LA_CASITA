@@ -2,13 +2,14 @@ import { OrbitControls, ContactShadows } from '@react-three/drei';
 import { Canvas, useThree } from '@react-three/fiber';
 import { useEffect } from 'react';
 import * as THREE from 'three';
-import { CasitaModel } from './CasitaModel';
+import { CasitaModel, type SingerReaction } from './CasitaModel';
 
 type FacadeSceneProps = {
   controlsFrozen?: boolean;
   experienceActive?: boolean;
   showConfetti?: boolean;
   singerPerforming?: boolean;
+  singerReaction?: SingerReaction;
 };
 
 function ResponsiveCamera({ experienceActive }: { experienceActive: boolean }) {
@@ -36,6 +37,7 @@ export function FacadeScene({
   experienceActive = false,
   showConfetti = false,
   singerPerforming = false,
+  singerReaction = null,
 }: FacadeSceneProps) {
   return (
     <section className="facade-screen" aria-label="La Casita exterior">
@@ -61,7 +63,12 @@ export function FacadeScene({
           shadow-mapSize-height={2048}
           shadow-mapSize-width={2048}
         />
-        <CasitaModel interactionsDisabled={controlsFrozen} showConfetti={showConfetti} singerPerforming={singerPerforming} />
+        <CasitaModel
+          interactionsDisabled={controlsFrozen}
+          showConfetti={showConfetti}
+          singerPerforming={singerPerforming}
+          singerReaction={singerReaction}
+        />
         <ContactShadows
           blur={2.6}
           color="#120c05"
