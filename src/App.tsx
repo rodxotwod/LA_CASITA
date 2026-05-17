@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { FacadeScene } from './components/FacadeScene';
+import { getActiveLyric } from './data/lyricTimeline';
 import { quizSongs, totalQuizStops } from './data/quizConfig';
 
 type GameState = 'idle' | 'playing' | 'question' | 'finished';
@@ -29,7 +30,6 @@ const translations = {
     song: 'Song',
     start: 'Start the experience',
     startCopy: (total: number) => `Start the track, answer ${total} timed prompts, and see your final score.`,
-    time: 'Time',
     wrong: 'Not this one. Back to the song.',
   },
   es: {
@@ -54,7 +54,6 @@ const translations = {
     song: 'Canción',
     start: 'Iniciar la experiencia',
     startCopy: (total: number) => `Inicia la canción, responde ${total} preguntas sincronizadas y mira tu puntaje final.`,
-    time: 'Tiempo',
     wrong: 'No era esa. Volvemos a la canción.',
   },
   fr: {
@@ -79,7 +78,6 @@ const translations = {
     song: 'Chanson',
     start: 'Démarrer l’expérience',
     startCopy: (total: number) => `Lance le morceau, réponds à ${total} questions synchronisées, puis découvre ton score final.`,
-    time: 'Temps',
     wrong: 'Ce n’est pas celle-ci. Retour à la chanson.',
   },
 } satisfies Record<Locale, Record<string, string | ((total: number) => string)>>;
@@ -87,12 +85,6 @@ const translations = {
 function getLocale(): Locale {
   const requestedLocale = new URLSearchParams(window.location.search).get('lang')?.toLowerCase();
   return requestedLocale === 'es' || requestedLocale === 'fr' || requestedLocale === 'en' ? requestedLocale : 'en';
-}
-
-function formatPlaybackTime(seconds: number) {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = (seconds % 60).toFixed(1).padStart(4, '0');
-  return `${minutes}:${remainingSeconds} (${seconds.toFixed(1)}s)`;
 }
 
 function App() {
@@ -113,6 +105,7 @@ function App() {
   const t = translations[locale];
   const activeSong = quizSongs[songIndex];
   const activeQuestion = activeSong?.stops[stopIndex];
+  const activeLyric = getActiveLyric(activeSong?.id, playbackTime);
   const totalQuestions = totalQuizStops;
   const controlsFrozen = gameState === 'question';
   const songIsPlaying = gameState === 'playing' && !isManuallyPaused;
@@ -316,10 +309,6 @@ function App() {
           <span>{t.score}</span>
           <strong>{score} / {totalQuestions}</strong>
         </div>
-        <div className="score-dock-metric score-dock-time">
-          <span>{t.time}</span>
-          <strong>{formatPlaybackTime(playbackTime)}</strong>
-        </div>
       </div>
 
       {gameState === 'idle' ? (
@@ -337,9 +326,10 @@ function App() {
       ) : null}
 
       {gameState === 'playing' ? (
-        <div className="game-hud" aria-live="polite">
-          <span>{t.prompt} {Math.min(answeredCount + 1, totalQuestions)}/{totalQuestions}</span>
-          {activeSong ? <span>{t.song} {activeSong.title}</span> : null}
+        <div className="lyrics-hud" aria-live="polite">
+          <span key={activeLyric?.text ?? activeSong?.id} className="lyrics-line">
+            {activeLyric?.text ?? activeSong?.title ?? ''}
+          </span>
         </div>
       ) : null}
 
