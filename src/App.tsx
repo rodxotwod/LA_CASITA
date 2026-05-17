@@ -154,6 +154,42 @@ function App() {
   const shareText = `${resultText}. ${scoreMessage}`;
 
   useEffect(() => {
+    const siteUrl = 'https://rodxotwod.github.io/LA_CASITA/';
+    const sharePath = locale === 'en' ? '' : `${locale}/`;
+    const image = `${siteUrl}og-cover-${locale}.png`;
+    const title = locale === 'es'
+      ? '¿Sobrevives al reto de letras de DtMF La Casita?'
+      : locale === 'fr'
+        ? 'Tu survis au défi paroles de DtMF La Casita ?'
+        : 'Can you survive the DtMF La Casita lyric challenge?';
+    const description = locale === 'es'
+      ? 'Escucha la canción, adivina la siguiente línea y demuestra que mereces ir al concierto.'
+      : locale === 'fr'
+        ? 'Lance le morceau, devine la ligne suivante et prouve que tu mérites ta place au concert.'
+        : 'Play the song, guess the next line, and prove you deserve a spot at the concert.';
+
+    const setMeta = (selector: string, value: string) => {
+      document.querySelector<HTMLMetaElement>(selector)?.setAttribute('content', value);
+    };
+
+    document.title = locale === 'es'
+      ? 'Reto de letras DtMF La Casita'
+      : locale === 'fr'
+        ? 'Défi paroles DtMF La Casita'
+        : 'DtMF La Casita Lyric Challenge';
+    document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.setAttribute('href', `${siteUrl}${sharePath}`);
+    setMeta('meta[name="description"]', description);
+    setMeta('meta[property="og:url"]', `${siteUrl}${sharePath}`);
+    setMeta('meta[property="og:title"]', title);
+    setMeta('meta[property="og:description"]', description);
+    setMeta('meta[property="og:image"]', image);
+    setMeta('meta[property="og:image:secure_url"]', image);
+    setMeta('meta[name="twitter:title"]', title);
+    setMeta('meta[name="twitter:description"]', description);
+    setMeta('meta[name="twitter:image"]', image);
+  }, [locale]);
+
+  useEffect(() => {
     return () => {
       if (resumeTimeoutRef.current) window.clearTimeout(resumeTimeoutRef.current);
       if (countdownTimeoutRef.current) window.clearTimeout(countdownTimeoutRef.current);

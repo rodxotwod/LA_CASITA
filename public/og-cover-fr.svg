@@ -104,12 +104,12 @@
 
   <g transform="translate(80 184)">
     <rect width="410" height="54" rx="8" fill="#ffc51e"/>
-    <text x="205" y="37" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="25" font-weight="900" fill="#11100f">LA CASITA LYRIC CHALLENGE</text>
+    <text x="205" y="37" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="25" font-weight="900" fill="#11100f">DÉFI PAROLES DE LA CASITA</text>
   </g>
 
-  <text x="80" y="312" font-family="Inter, Arial, sans-serif" font-size="68" font-weight="950" fill="#ffc51e">Guess the</text>
-  <text x="80" y="384" font-family="Inter, Arial, sans-serif" font-size="68" font-weight="950" fill="#ffc51e">next line</text>
-  <text x="80" y="438" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="750" fill="#fff9ef">Listen. Guess. Win.</text>
-  <text x="80" y="482" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="650" fill="#d9cfb8">A 3D Bad Bunny-inspired fan challenge.</text>
+  <text x="80" y="312" font-family="Inter, Arial, sans-serif" font-size="68" font-weight="950" fill="#ffc51e">Devine la</text>
+  <text x="80" y="384" font-family="Inter, Arial, sans-serif" font-size="68" font-weight="950" fill="#ffc51e">ligne suivante</text>
+  <text x="80" y="438" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="750" fill="#fff9ef">Écoute. Devine. Gagne.</text>
+  <text x="80" y="482" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="650" fill="#d9cfb8">Un défi fan 3D inspiré par Bad Bunny.</text>
 
 </svg>
