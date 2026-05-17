@@ -108,6 +108,7 @@ function App() {
   const activeLyric = getActiveLyric(activeSong?.id, playbackTime);
   const totalQuestions = totalQuizStops;
   const controlsFrozen = gameState === 'question';
+  const experienceActive = gameState !== 'idle';
   const songIsPlaying = gameState === 'playing' && !isManuallyPaused;
   const resultText = useMemo(() => {
     if (locale === 'es') return `Logré ${score}/${totalQuestions} en el reto de letras DtMF La Casita`;
@@ -293,7 +294,7 @@ function App() {
       <header className="site-header" aria-label="DtMF">
         <div className="site-logo">DtMF</div>
       </header>
-      <FacadeScene controlsFrozen={controlsFrozen} singerPerforming={songIsPlaying} />
+      <FacadeScene controlsFrozen={controlsFrozen} experienceActive={experienceActive} singerPerforming={songIsPlaying} />
       <audio ref={audioRef} onEnded={handleSongEnded} preload="auto" />
 
       {gameState !== 'idle' && gameState !== 'finished' ? (
@@ -325,10 +326,10 @@ function App() {
         </section>
       ) : null}
 
-      {gameState === 'playing' ? (
+      {gameState === 'playing' && activeLyric ? (
         <div className="lyrics-hud" aria-live="polite">
-          <span key={activeLyric?.text ?? activeSong?.id} className="lyrics-line">
-            {activeLyric?.text ?? activeSong?.title ?? ''}
+          <span key={activeLyric.text} className="lyrics-line">
+            {activeLyric.text}
           </span>
         </div>
       ) : null}

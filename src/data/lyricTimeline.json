@@ -2,20 +2,7 @@
   "songs": [
     {
       "songId": "DtMF",
-      "lyrics": [
-        {
-          "timestamp": 0,
-          "text": "Add timeline lyrics in src/data/lyricTimeline.json"
-        },
-        {
-          "timestamp": 8,
-          "text": "This line will pulse while the song plays"
-        },
-        {
-          "timestamp": 16,
-          "text": "Use timestamps in seconds"
-        }
-      ]
+      "lyrics": []
     }
   ]
 }

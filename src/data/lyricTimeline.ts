@@ -21,7 +21,9 @@ export type LyricEntry = {
 
 const lyricSongs = (lyricTimelineConfig as RawLyricTimeline).songs.map((song) => ({
   ...song,
-  lyrics: [...song.lyrics].sort((first, second) => first.timestamp - second.timestamp),
+  lyrics: [...song.lyrics]
+    .filter((lyric) => lyric.text.trim().length > 0)
+    .sort((first, second) => first.timestamp - second.timestamp),
 }));
 
 export function getActiveLyric(songId: string | undefined, currentTime: number) {
