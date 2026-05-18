@@ -7,6 +7,13 @@ import { quizSongs, totalQuizStops } from './data/quizConfig';
 type GameState = 'idle' | 'countdown' | 'playing' | 'question' | 'finished';
 type ShareStatus = 'idle' | 'copied' | 'shared' | 'error';
 type Locale = 'en' | 'es' | 'fr';
+type AnalyticsParams = Record<string, string | number | boolean | undefined>;
+
+declare global {
+  interface Window {
+    gtag?: (command: 'event', eventName: string, params?: AnalyticsParams) => void;
+  }
+}
 
 const translations = {
   en: {
@@ -116,10 +123,30 @@ function formatDevSeconds(seconds: number) {
   return `${seconds.toFixed(1)}s`;
 }
 
+function trackEvent(eventName: string, params: AnalyticsParams = {}) {
+  window.gtag?.('event', eventName, {
+    event_category: 'dtmf_lyric_challenge',
+    ...params,
+  });
+}
+
 function App() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const resumeTimeoutRef = useRef<number | null>(null);
   const countdownTimeoutRef = useRef<number | null>(null);
+  const experienceStartedRef = useRef(false);
+  const quizCompletedRef = useRef(false);
+  const experienceCompletedRef = useRef(false);
+  const abandonTrackedRef = useRef(false);
+  const latestGameRef = useRef({
+    answeredCount: 0,
+    gameState: 'idle' as GameState,
+    locale: getLocale(),
+    playbackTime: 0,
+    score: 0,
+    songId: '',
+    totalQuestions: totalQuizStops,
+  });
   const [gameState, setGameState] = useState<GameState>('idle');
   const [songIndex, setSongIndex] = useState(0);
   const [stopIndex, setStopIndex] = useState(0);
@@ -152,6 +179,18 @@ function App() {
   const scoreMessage = (t.scoreMessages as { minScore: number; text: string }[])
     .find((message) => score >= message.minScore)?.text ?? '';
   const shareText = `${resultText}. ${scoreMessage}`;
+
+  useEffect(() => {
+    latestGameRef.current = {
+      answeredCount,
+      gameState,
+      locale,
+      playbackTime,
+      score,
+      songId: activeSong?.id ?? '',
+      totalQuestions,
+    };
+  }, [activeSong?.id, answeredCount, gameState, locale, playbackTime, score, totalQuestions]);
 
   useEffect(() => {
     const siteUrl = 'https://rodxotwod.github.io/LA_CASITA/';
@@ -197,6 +236,42 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const trackAbandon = () => {
+      if (
+        !experienceStartedRef.current
+        || quizCompletedRef.current
+        || experienceCompletedRef.current
+        || abandonTrackedRef.current
+      ) return;
+
+      const latest = latestGameRef.current;
+      abandonTrackedRef.current = true;
+      trackEvent('game_abandoned', {
+        answered_count: latest.answeredCount,
+        game_state: latest.gameState,
+        locale: latest.locale,
+        playback_time: Math.round(latest.playbackTime),
+        score: latest.score,
+        song_id: latest.songId,
+        total_questions: latest.totalQuestions,
+        transport_type: 'beacon',
+      });
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') trackAbandon();
+    };
+
+    window.addEventListener('pagehide', trackAbandon);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener('pagehide', trackAbandon);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
+  useEffect(() => {
     if (gameState !== 'playing' || isManuallyPaused) return;
 
     let frameId = 0;
@@ -208,6 +283,15 @@ function App() {
         audio.pause();
         setSelectedAnswer(null);
         setGameState('question');
+        trackEvent('question_shown', {
+          answered_count: answeredCount,
+          locale,
+          question_id: activeQuestion.id,
+          question_index: stopIndex + 1,
+          song_id: activeSong?.id,
+          timestamp: activeQuestion.timestamp,
+          total_questions: totalQuestions,
+        });
         return;
       }
 
@@ -216,7 +300,7 @@ function App() {
 
     frameId = window.requestAnimationFrame(checkQuestionTime);
     return () => window.cancelAnimationFrame(frameId);
-  }, [activeQuestion, gameState, isManuallyPaused]);
+  }, [activeQuestion, activeSong?.id, answeredCount, gameState, isManuallyPaused, locale, stopIndex, totalQuestions]);
 
   const playSong = async (nextSongIndex: number, startTime = 0) => {
     const audio = audioRef.current;
@@ -251,6 +335,15 @@ function App() {
     setSingerReaction(null);
     setCountdown(3);
     setGameState('countdown');
+    experienceStartedRef.current = true;
+    quizCompletedRef.current = false;
+    experienceCompletedRef.current = false;
+    abandonTrackedRef.current = false;
+    trackEvent('game_start_clicked', {
+      locale,
+      song_id: quizSongs[0]?.id,
+      total_questions: totalQuestions,
+    });
 
     try {
       const song = quizSongs[0];
@@ -279,13 +372,23 @@ function App() {
           audio.volume = 0.86;
           setPlaybackTime(0);
           setGameState('playing');
+          trackEvent('game_countdown_completed', {
+            locale,
+            song_id: song.id,
+            total_questions: totalQuestions,
+          });
         }, 1000);
       };
 
       runCountdown(2);
     } catch {
+      experienceStartedRef.current = false;
       setGameState('idle');
       setAudioError(t.audioBlocked as string);
+      trackEvent('audio_start_blocked', {
+        locale,
+        song_id: quizSongs[0]?.id,
+      });
     }
   };
 
@@ -298,6 +401,11 @@ function App() {
         await audio.play();
         setIsManuallyPaused(false);
         setGameState('playing');
+        trackEvent('audio_resumed', {
+          locale,
+          playback_time: Math.round(audio.currentTime),
+          song_id: activeSong?.id,
+        });
       } catch {
         setAudioError(t.audioResumeError as string);
       }
@@ -307,6 +415,13 @@ function App() {
     audio.pause();
     setPlaybackTime(audio.currentTime);
     setIsManuallyPaused(true);
+    trackEvent('audio_paused', {
+      answered_count: answeredCount,
+      locale,
+      playback_time: Math.round(audio.currentTime),
+      score,
+      song_id: activeSong?.id,
+    });
   };
 
   const chooseAnswer = (choiceIndex: number) => {
@@ -314,15 +429,38 @@ function App() {
 
     const isCorrect = choiceIndex === activeQuestion.correctIndex;
     const nextAnsweredCount = answeredCount + 1;
+    const nextScore = score + (isCorrect ? 1 : 0);
     setSelectedAnswer(choiceIndex);
     setAnsweredCount(nextAnsweredCount);
     if (isCorrect) setScore((currentScore) => currentScore + 1);
+    trackEvent('question_answered', {
+      answered_count: nextAnsweredCount,
+      correct_choice: activeQuestion.correctIndex,
+      is_correct: isCorrect,
+      locale,
+      question_id: activeQuestion.id,
+      question_index: stopIndex + 1,
+      score: nextScore,
+      selected_choice: choiceIndex,
+      song_id: activeSong?.id,
+      timestamp: activeQuestion.timestamp,
+      total_questions: totalQuestions,
+    });
 
     resumeTimeoutRef.current = window.setTimeout(async () => {
       const nextStopIndex = stopIndex + 1;
       const audio = audioRef.current;
 
       if (nextAnsweredCount >= totalQuestions) {
+        if (!quizCompletedRef.current) {
+          quizCompletedRef.current = true;
+          trackEvent('quiz_completed', {
+            locale,
+            score: nextScore,
+            song_id: activeSong?.id,
+            total_questions: totalQuestions,
+          });
+        }
         setStopIndex(nextStopIndex);
         setSelectedAnswer(null);
         setIsManuallyPaused(false);
@@ -363,6 +501,15 @@ function App() {
 
     const nextSongIndex = songIndex + 1;
     if (nextSongIndex >= quizSongs.length) {
+      experienceCompletedRef.current = true;
+      trackEvent('experience_completed', {
+        answered_count: answeredCount,
+        locale,
+        playback_time: Math.round(audioRef.current?.currentTime ?? playbackTime),
+        score,
+        song_id: activeSong?.id,
+        total_questions: totalQuestions,
+      });
       setGameState('finished');
       return;
     }
@@ -390,17 +537,40 @@ function App() {
           title: 'DtMF La Casita lyric challenge',
         });
         setShareStatus('shared');
+        trackEvent('score_shared', {
+          method: 'native_share',
+          locale,
+          score,
+          total_questions: totalQuestions,
+        });
         return;
       }
 
       await navigator.clipboard.writeText(shareText);
       setShareStatus('copied');
+      trackEvent('score_shared', {
+        method: 'clipboard',
+        locale,
+        score,
+        total_questions: totalQuestions,
+      });
     } catch {
       try {
         await navigator.clipboard.writeText(shareText);
         setShareStatus('copied');
+        trackEvent('score_shared', {
+          method: 'clipboard_after_error',
+          locale,
+          score,
+          total_questions: totalQuestions,
+        });
       } catch {
         setShareStatus('error');
+        trackEvent('score_share_failed', {
+          locale,
+          score,
+          total_questions: totalQuestions,
+        });
       }
     }
   };
